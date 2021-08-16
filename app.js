@@ -15,7 +15,7 @@ app.get('/movies', (req, res) => {
     console.log(res)
   })
 })
-console.log('api')
+
 const PORT  = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
