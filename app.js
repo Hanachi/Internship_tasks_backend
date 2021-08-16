@@ -1,12 +1,18 @@
 const express = require('express');
+const fs = require('fs');
 const path = require('path');
 
 const app = express();
 
 app.use(express.static(path.join(__dirname + '/../client/public')))
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname  + 'index.html');
+app.get('/movies', (req, res) => {
+  let dataFromJson;
+  fs.readFile('movies.json', function(err, data) {
+    if(err) throw err;
+    dataFromJson = JSON.parse(data);
+    res.send(dataFromJson);
+  })
 })
 
 const PORT  = process.env.PORT || 5000;
