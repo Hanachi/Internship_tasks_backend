@@ -1,4 +1,4 @@
 [submodule "server"]
-	path = /home/yaroslavpryima/Desktop/Internship_tasks/Task1/client
-	url = https://github.com/Hanachi/Internship_tasks_frontendgit@github.com.git
-	branch = task1
+	path = /home/yaroslavpryima/Desktop/Internship_tasks/Task1/server
+	url =  git@github.com.giima/Desktop/Internship_tasks/Task1/servert
+	branch = release/Russell
