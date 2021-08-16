@@ -2,3 +2,6 @@
 	path = /home/yaroslavpryima/Desktop/Internship_tasks/Task1/server
 	url =  git@github.com.giima/Desktop/Internship_tasks/Task1/servert
 	branch = release/Russell
+[submodule "Internship_tasks_frontend"]
+	path = Internship_tasks_frontend
+	url = https://github.com/Hanachi/Internship_tasks_frontend
