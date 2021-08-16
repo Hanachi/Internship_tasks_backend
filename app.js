@@ -12,9 +12,10 @@ app.get('/movies', (req, res) => {
     if(err) throw err;
     dataFromJson = JSON.parse(data);
     res.send(dataFromJson);
+    console.log(res)
   })
 })
-
+console.log('api')
 const PORT  = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
