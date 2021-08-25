@@ -1,5 +1,5 @@
-const SortingAlgorithms = require('./sorting/sortingAlg');
-const SearchingAlgorithms = require('./searching/searchingAlg');
+const { SortingAlgorithms } = require('./sorting/sortingAlg');
+const { SearchingAlgorithms } = require('./searching/searchingAlg');
 
 class FactoryAlgorithms {
   constructor() {
@@ -23,4 +23,4 @@ class FactoryAlgorithms {
 
 }
 
-export default FactoryAlgorithms;
+module.exports = { FactoryAlgorithms };

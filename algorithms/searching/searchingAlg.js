@@ -1,3 +1,5 @@
+const { AbstractAlgorithms } = require('../abstractAlgorithms');
+
 class SearchingAlgorithms extends AbstractAlgorithms {
   constructor() {
     super();
@@ -32,4 +34,4 @@ class SearchingAlgorithms extends AbstractAlgorithms {
   }
 }
 
-export default SearchingAlgorithms;
+module.exports = { SearchingAlgorithms };

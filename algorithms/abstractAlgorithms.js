@@ -1,11 +1,12 @@
+const fs = require('fs');
 class AbstractAlgorithms {
   constructor() {
-
   }
-  execute() {
 
-  }
-  getMovies() {
-
+	getMovies() {
+		const fileContent = fs.readFileSync('movies.json');
+		const moviesData = JSON.parse(fileContent);
+		return moviesData;
   }
 }
+module.exports = { AbstractAlgorithms }
