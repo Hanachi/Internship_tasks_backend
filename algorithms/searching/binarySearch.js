@@ -17,7 +17,7 @@ class BinarySearch extends AbstractAlgorithms {
 		}
 		return console.log('Key wasnt found');
 	}
-	
+
 	execute(key) {
 		return this.binarySearch(this.getMovies(), key);
 	}
