@@ -6,13 +6,15 @@ class BinarySearch extends AbstractAlgorithms {
 
 		while (start <= end) {
 			let middle = Math.floor((start + end) / 2);
+			const guess = sortedArray[middle];
 
-			if (sortedArray[middle].year == key) {
-				return sortedArray[middle];
-			} else if (sortedArray[middle].year < key) {
-				start = middle + 1;
+			if (guess.year == key) {
+				return guess;
+			}
+			if (guess.year > key) {
+				end = middle - 1
 			} else {
-				end = middle - 1;
+				start = middle + 1
 			}
 		}
 		return console.log('Key wasnt found');
