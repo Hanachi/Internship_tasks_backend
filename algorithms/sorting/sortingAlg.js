@@ -1,13 +1,15 @@
 const { AbstractAlgorithms } = require('../abstractAlgorithms');
 const { QuickSort } = require('./quickSort');
-// const { BubbleSort } = require('./bubbleSort');
+const { BubbleSort } = require('./bubbleSort');
+const { MergeSort } = require('./mergeSort');
+const { HeapSort } = require('./heapSort');
 class SortingAlgorithms extends AbstractAlgorithms {
   constructor() {
     super();
     this.quickSort = new QuickSort();
-    // this.bubbleSort = new BubbleSort();
-    // this.mergeSort = new MergeSort();
-    // this.heapSort = new HeapSort();
+    this.bubbleSort = new BubbleSort();
+    this.mergeSort = new MergeSort();
+    this.heapSort = new HeapSort();
   }
 
   execute(algorithm) {

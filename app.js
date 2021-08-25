@@ -14,11 +14,15 @@ app.get('/', (req, res) => {
 
 app.get('/alg/sort/:algName', (req, res) => {
   const { algName } = req.params;
-
+  const hrstart = process.hrtime();
 
   const sortedData = algorithmInstance.getAlgorithmInstance('sort', algName);
 
-
+  const hrend = process.hrtime(hrstart);
+  const used = process.memoryUsage().heapUsed / 1024 / 1024;
+  
+  console.log(`${algName} exectuion time is: ${hrend} ms`);
+  console.log(`${algName} uses ${Math.round(used * 100) / 100} MB`);
   res.send(sortedData); 
 })
 app.get('/alg/search/:algName', (req, res) => {
