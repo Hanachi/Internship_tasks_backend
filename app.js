@@ -25,12 +25,17 @@ app.get('/alg/sort/:algName', (req, res) => {
   console.log(`${algName} uses ${Math.round(used * 100) / 100} MB`);
   res.send(sortedData); 
 })
-app.get('/alg/search/:algName', (req, res) => {
-  const { algName } = req.params;
+app.get('/alg/search/:algName/:key', (req, res) => {
+  const { algName, key } = req.params;
+  const hrstart = process.hrtime();
+  const movie = algorithmInstance.getAlgorithmInstance('search', algName, key);
 
-  algorithmInstance.getAlgorithmInstance('search', algName);
+  const hrend = process.hrtime(hrstart);
+  const used = process.memoryUsage().heapUsed / 1024 / 1024;
 
-  res.send(sortedData);
+  console.log(`${algName} exectuion time is: ${hrend} ms`);
+  console.log(`${algName} uses ${Math.round(used * 100) / 100} MB`);
+  res.send(movie);
 })
 
 app.get('/movies', (req, res) => {
