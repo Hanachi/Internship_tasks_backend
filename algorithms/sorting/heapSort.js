@@ -28,11 +28,11 @@ class HeapSort extends AbstractAlgorithms {
 		let right = 2 * i + 2;
 
 		// if left child is larger than root
-		if (left < size && array[left].title.length > array[max].title.length)
+		if (left < size && array[left].title > array[max].title)
 			max = left;
 
 		// if right child is larger than max
-		if (right < size && array[right].title.length > array[max].title.length)
+		if (right < size && array[right].title > array[max].title)
 			max = right;
 
 		// if max is not root

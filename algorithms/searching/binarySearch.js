@@ -3,21 +3,25 @@ class BinarySearch extends AbstractAlgorithms {
 	binarySearch(sortedArray, key) {
 		let start = 0;
 		let end = sortedArray.length - 1;
+		
+		let matchedItems = [];
 
 		while (start <= end) {
 			let middle = Math.floor((start + end) / 2);
-			const guess = sortedArray[middle];
 
-			if (guess.year == key) {
-				return guess;
+			if ((sortedArray[middle].year == key) && (sortedArray[start].year == key)) {
+				end = middle + 1;
+				matchedItems.push(sortedArray[start]);
 			}
-			if (guess.year > key) {
-				end = middle - 1
+			if (sortedArray[middle].year > key) {
+				end = middle - 1;
 			} else {
-				start = middle + 1
+				start = start + 1;
+				end = middle + 1;
 			}
 		}
-		return console.log('Key wasnt found');
+		let result = (matchedItems.length !== 0) ? matchedItems : console.log('Key wasnt found');
+		return result;
 	}
 
 	execute(key) {

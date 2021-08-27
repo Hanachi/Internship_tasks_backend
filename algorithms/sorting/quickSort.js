@@ -8,7 +8,7 @@ class QuickSort extends AbstractAlgorithms {
     const right = [];
       
     for (let i = 1; i < arr.length; i++) {
-      if (pivot.title.length > arr[i].title.length) {
+      if (pivot.title > arr[i].title) {
         left.push(arr[i]);
       } else {
         right.push(arr[i]);

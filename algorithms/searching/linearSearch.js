@@ -1,11 +1,13 @@
 const { AbstractAlgorithms } = require('../abstractAlgorithms');
 class LinearSearch extends AbstractAlgorithms {
 	linearSearch(list, key) {
+		let matchedItems = [];
 		for (let element of list) {
 			if (element.year == key) {
-				return element;
+				matchedItems.push(element);
 			}
 		}
+		return matchedItems;
 	}
 
 	execute(key) {

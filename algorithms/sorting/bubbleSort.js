@@ -11,7 +11,7 @@ class BubbleSort extends AbstractAlgorithms {
 			isSwapped = false;
 				
 			for(let j = 0; j < len - 1; j++){
-				if(arr[j].title.length > arr[j+1].title.length){
+				if(arr[j].title > arr[j+1].title){
 					let temp = arr[j]
 					arr[j] = arr[j+1];
 					arr[j+1] = temp;

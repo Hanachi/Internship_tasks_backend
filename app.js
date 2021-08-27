@@ -28,14 +28,14 @@ app.get('/alg/sort/:algName', (req, res) => {
 app.get('/alg/search/:algName/:key', (req, res) => {
   const { algName, key } = req.params;
   const hrstart = process.hrtime();
-  const movie = algorithmInstance.getAlgorithmInstance('search', algName, key);
+  const foundMoviesList = algorithmInstance.getAlgorithmInstance('search', algName, key);
 
   const hrend = process.hrtime(hrstart);
   const used = process.memoryUsage().heapUsed / 1024 / 1024;
 
   console.log(`${algName} exectuion time is: ${hrend} ms`);
   console.log(`${algName} uses ${Math.round(used * 100) / 100} MB`);
-  res.send(movie);
+  res.send(foundMoviesList);
 })
 
 app.get('/movies', (req, res) => {

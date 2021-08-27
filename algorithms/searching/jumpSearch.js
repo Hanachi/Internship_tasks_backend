@@ -1,32 +1,33 @@
 const { AbstractAlgorithms } = require('../abstractAlgorithms');
 class JumpSearch extends AbstractAlgorithms {
-	jumpSearch(arr, key) {
+	jumpSearch(sortedArray, target) {
+		const arraySize = sortedArray.length;
 
-		let len = arr.length;
-		let step = Math.floor(Math.sqrt(len));
-		let blockStart = 0, currentStep = step;
+		if(arraySize < 1) return -1;
+		if(sortedArray[0].year > target) return -1;
+		if(sortedArray[arraySize - 1].year < target) return -1;
 
-		while (arr[Math.min(currentStep, len) - 1].year < key) {
-			blockStart = currentStep;
-			currentStep += step;
+		let targetIndex = [];
+		let lowerBound = 0;
+		let upperBound = sortedArray[arraySize - 1].year;
 
-			if (blockStart >= len) {
-				return -1;
+		const block = Math.floor(Math.sqrt(arraySize));
+
+		for (let i = block; i < arraySize; i += block) {
+			if(sortedArray[i].year < target) {
+				lowerBound = i;
+			} else {
+				upperBound = i;
+			}
+			
+		}
+		for (let i = lowerBound; i < upperBound; i+= 1) {
+			if(sortedArray[i].year == target) {
+				targetIndex.push(sortedArray[i]);	
 			}
 		}
 
-		while (arr[blockStart].year < key) {
-			blockStart++;
-			if (blockStart == Math.min(currentStep, len)) {
-				return console.log('Target doesnt exist.');
-			}
-		}
-
-		if (arr[blockStart].year == key) {
-			return arr[blockStart]
-		}
-			return console.log('Target doesnt exist.');
-	
+		return targetIndex;
 	}
 
 	execute(key) {

@@ -14,7 +14,7 @@ class MergeSort extends AbstractAlgorithms {
 		let sorted = [];
 
 		while (arr1.length && arr2.length) {
-			if (arr1[0].title.length < arr2[0].title.length) {
+			if (arr1[0].title < arr2[0].title) {
 				sorted.push(arr1.shift());
 			} else {
 				sorted.push(arr2.shift());
