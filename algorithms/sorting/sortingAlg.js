@@ -12,19 +12,19 @@ class SortingAlgorithms extends AbstractAlgorithms {
     this.heapSort = new HeapSort();
   }
 
-  execute(algorithm) {
+  execute(algorithm, key) {
     switch(algorithm) {
       case 'quickSort': {
-        return this.quickSort.execute();
+        return this.quickSort.execute(key);
       }
       case 'bubbleSort': {
-        return this.bubbleSort.execute();
+        return this.bubbleSort.execute(key);
       }
       case 'mergeSort': {
-        return this.mergeSort.execute();
+        return this.mergeSort.execute(key);
       }
       case 'heapSort': {
-        return this.heapSort.execute();
+        return this.heapSort.execute(key);
       }
       default: {
         throw console.error();

@@ -7,13 +7,13 @@ class FactoryAlgorithms {
     this.searching = new SearchingAlgorithms();
   }
 
-  getAlgorithmInstance(type, algorithm, key) {
+  getAlgorithmInstance(type, algorithm, key, keyValue) {
     switch(type) {
       case 'sort': {
-        return this.sorting.execute(algorithm);
+        return this.sorting.execute(algorithm, key, keyValue);
       }
       case 'search': {
-        return this.searching.execute(algorithm, key);
+        return this.searching.execute(algorithm, key, keyValue);
       }
     }
 
