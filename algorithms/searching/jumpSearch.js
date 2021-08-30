@@ -21,7 +21,7 @@ class JumpSearch extends AbstractAlgorithms {
 			
 		}
 		for (let i = lowerBound; i < upperBound; i+= 1) {
-			if(sortedArray[i][target] == targetValue || sortedArray[i][target].includes(targetValue)) {
+			if(sortedArray[i][target] == targetValue) {
 				targetIndex.push(sortedArray[i]);	
 			}
 		}

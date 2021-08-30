@@ -7,7 +7,6 @@ class QuickSort extends AbstractAlgorithms {
     const left = [];
     const right = [];
 
-    const titleRegExp = /^\s*[A-Za-z0-9]+(?:\s+[A-Za-z0-9]+)*\s*$/;
     for (let i = 1; i < arr.length; i++) {
       if (pivot[key] > arr[i][key]) {
         left.push(arr[i]);

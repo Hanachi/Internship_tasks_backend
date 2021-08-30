@@ -17,27 +17,30 @@ app.get('/', (req, res) => {
 app.get('/alg/sort/:algName/:key', (req, res) => {
   const { algName, key } = req.params;
   const hrstart = process.hrtime();
-  //setinterval 100ms
+  const beforeScript = process.memoryUsage().heapUsed / 1024 / 1024;
+
   const sortedData = algorithmInstance.getAlgorithmInstance('sort', algName, key);
 
+  const afterScript = process.memoryUsage().heapUsed / 1024 / 1024;
   const hrend = process.hrtime(hrstart);
-  const used = process.memoryUsage().heapUsed / 1024 / 1024;
   
   console.log(`${algName} exectuion time is: ${hrend} ms`);
-  console.log(`${algName} uses ${Math.round(used * 100) / 100} MB`);
+  console.log(`${algName} uses ${Math.round((afterScript - beforeScript) * 100) / 100} MB`);
+
   res.send(sortedData); 
 })
 app.get('/alg/search/:algName/:key&:keyValue', (req, res) => {
   const { algName, key, keyValue } = req.params;
-  
   const hrstart = process.hrtime();
+  const beforeScript = process.memoryUsage().heapUsed / 1024 / 1024;
+
   const foundMoviesList = algorithmInstance.getAlgorithmInstance('search', algName, key, keyValue);
 
+  const afterScript = process.memoryUsage().heapUsed / 1024 / 1024;
   const hrend = process.hrtime(hrstart);
-  const used = process.memoryUsage().heapUsed / 1024 / 1024;
 
   console.log(`${algName} exectuion time is: ${hrend} ms`);
-  console.log(`${algName} uses ${Math.round(used * 100) / 100} MB`);
+  console.log(`${algName} uses ${Math.round((afterScript - beforeScript) * 100) / 100} MB`);
   res.send(foundMoviesList);
 })
 
