@@ -1,3 +1,5 @@
+'use strict';
+
 const { SortingAlgorithms } = require('./sorting/sortingAlg');
 const { SearchingAlgorithms } = require('./searching/searchingAlg');
 

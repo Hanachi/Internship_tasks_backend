@@ -1,3 +1,5 @@
+'use strict';
+
 const { AbstractAlgorithms } = require('../abstractAlgorithms');
 const { QuickSort } = require('./quickSort');
 const { BubbleSort } = require('./bubbleSort');

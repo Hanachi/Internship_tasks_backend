@@ -1,3 +1,5 @@
+'use strict';
+
 const { AbstractAlgorithms } = require('../abstractAlgorithms');
 
 class MergeSort extends AbstractAlgorithms {

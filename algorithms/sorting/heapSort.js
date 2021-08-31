@@ -1,5 +1,6 @@
-const { AbstractAlgorithms } = require('../abstractAlgorithms');
+'use strict';
 
+const { AbstractAlgorithms } = require('../abstractAlgorithms');
 class HeapSort extends AbstractAlgorithms {
 	heapSort(array, key) {
 		const size = array.length;

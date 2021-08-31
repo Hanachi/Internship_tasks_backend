@@ -1,3 +1,5 @@
+'use strict';
+
 const { AbstractAlgorithms } = require('../abstractAlgorithms');
 
 class QuickSort extends AbstractAlgorithms {
