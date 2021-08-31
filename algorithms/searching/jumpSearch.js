@@ -1,11 +1,10 @@
 const { AbstractAlgorithms } = require('../abstractAlgorithms');
 class JumpSearch extends AbstractAlgorithms {
-	jumpSearch(sortedArray, target) {
+	jumpSearch(sortedArray, target, targetValue) {
 		const arraySize = sortedArray.length;
+		sortedArray.sort((a, b) => a[target] - b[target]);
 
 		if(arraySize < 1) return -1;
-		if(sortedArray[0].year > target) return -1;
-		if(sortedArray[arraySize - 1].year < target) return -1;
 
 		let targetIndex = [];
 		let lowerBound = 0;
@@ -14,7 +13,7 @@ class JumpSearch extends AbstractAlgorithms {
 		const block = Math.floor(Math.sqrt(arraySize));
 
 		for (let i = block; i < arraySize; i += block) {
-			if(sortedArray[i].year < target) {
+			if(sortedArray[i][target] < targetValue) {
 				lowerBound = i;
 			} else {
 				upperBound = i;
@@ -22,7 +21,7 @@ class JumpSearch extends AbstractAlgorithms {
 			
 		}
 		for (let i = lowerBound; i < upperBound; i+= 1) {
-			if(sortedArray[i].year == target) {
+			if(sortedArray[i][target] == targetValue) {
 				targetIndex.push(sortedArray[i]);	
 			}
 		}
@@ -30,8 +29,8 @@ class JumpSearch extends AbstractAlgorithms {
 		return targetIndex;
 	}
 
-	execute(key) {
-		return this.jumpSearch(this.getMovies(), key);
+	execute(key, keyValue) {
+		return this.jumpSearch(this.getMovies(), key, keyValue);
 	}
 
 }

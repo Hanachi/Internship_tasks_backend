@@ -1,19 +1,18 @@
 const { AbstractAlgorithms } = require('../abstractAlgorithms');
 class BinarySearch extends AbstractAlgorithms {
-	binarySearch(sortedArray, key) {
+	binarySearch(sortedArray, key, keyValue) {
 		let start = 0;
 		let end = sortedArray.length - 1;
-		
 		let matchedItems = [];
 
 		while (start <= end) {
 			let middle = Math.floor((start + end) / 2);
 
-			if ((sortedArray[middle].year == key) && (sortedArray[start].year == key)) {
+			if ((sortedArray[middle][key] == keyValue) && (sortedArray[start][key] == keyValue)) {
 				end = middle + 1;
 				matchedItems.push(sortedArray[start]);
 			}
-			if (sortedArray[middle].year > key) {
+			if (sortedArray[middle][key] > keyValue) {
 				end = middle - 1;
 			} else {
 				start = start + 1;
@@ -24,8 +23,8 @@ class BinarySearch extends AbstractAlgorithms {
 		return result;
 	}
 
-	execute(key) {
-		return this.binarySearch(this.getMovies(), key);
+	execute(key, keyValue) {
+		return this.binarySearch(this.getMovies(), key, keyValue);
 	}
 
 }
