@@ -8,19 +8,19 @@ class SearchingAlgorithms extends AbstractAlgorithms {
     super();
     this.binarySearch = new BinarySearch();
     this.linearSearch = new LinearSearch();
-    // this.jumpSearch = new JumpSearch();
+    this.jumpSearch = new JumpSearch();
   }
 
-  execute(algorithm, key) {
+  execute(algorithm, key, keyValue) {
     switch(algorithm) {
       case 'binarySearch': {
-        return this.binarySearch.execute(key);
+        return this.binarySearch.execute(key, keyValue);
       }
       case 'linearSearch': {
-        return this.linearSearch.execute(key);
+        return this.linearSearch.execute(key, keyValue);
       }
       case 'jumpSearch': {
-        return this.jumpSearch.execute();
+        return this.jumpSearch.execute(key, keyValue);
       }
       default: {
         throw console.error();

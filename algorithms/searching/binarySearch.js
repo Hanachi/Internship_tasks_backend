@@ -1,25 +1,30 @@
 const { AbstractAlgorithms } = require('../abstractAlgorithms');
 class BinarySearch extends AbstractAlgorithms {
-	binarySearch(sortedArray, key) {
+	binarySearch(sortedArray, key, keyValue) {
 		let start = 0;
 		let end = sortedArray.length - 1;
+		let matchedItems = [];
 
 		while (start <= end) {
 			let middle = Math.floor((start + end) / 2);
 
-			if (sortedArray[middle].year == key) {
-				return sortedArray[middle];
-			} else if (sortedArray[middle].year < key) {
-				start = middle + 1;
-			} else {
+			if ((sortedArray[middle][key] == keyValue) && (sortedArray[start][key] == keyValue)) {
+				end = middle + 1;
+				matchedItems.push(sortedArray[start]);
+			}
+			if (sortedArray[middle][key] > keyValue) {
 				end = middle - 1;
+			} else {
+				start = start + 1;
+				end = middle + 1;
 			}
 		}
-		return console.log('Key wasnt found');
+		let result = (matchedItems.length !== 0) ? matchedItems : console.log('Key wasnt found');
+		return result;
 	}
 
-	execute(key) {
-		return this.binarySearch(this.getMovies(), key);
+	execute(key, keyValue) {
+		return this.binarySearch(this.getMovies(), key, keyValue);
 	}
 
 }

@@ -1,7 +1,7 @@
 const { AbstractAlgorithms } = require('../abstractAlgorithms');
 
 class BubbleSort extends AbstractAlgorithms {
-	bubbleSort(arr){		
+	bubbleSort(arr, key){		
 		let len = arr.length;
 			
 		let isSwapped = false;
@@ -11,7 +11,7 @@ class BubbleSort extends AbstractAlgorithms {
 			isSwapped = false;
 				
 			for(let j = 0; j < len - 1; j++){
-				if(arr[j].title.length > arr[j+1].title.length){
+				if(arr[j][key] > arr[j+1][key]){
 					let temp = arr[j]
 					arr[j] = arr[j+1];
 					arr[j+1] = temp;
@@ -24,8 +24,8 @@ class BubbleSort extends AbstractAlgorithms {
 		}
 		return arr;
 	}
-	execute() {
-		return this.bubbleSort(this.getMovies())
+	execute(key) {
+		return this.bubbleSort(this.getMovies(), key)
 	}
 }
 
