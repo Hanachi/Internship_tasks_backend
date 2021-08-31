@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
@@ -12,21 +14,34 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + 'index.html'));
 })
 
-app.get('/alg/sort/:algName', (req, res) => {
-  const { algName } = req.params;
+app.get('/alg/sort/:algName/:key', (req, res) => {
+  const { algName, key } = req.params;
+  const hrstart = process.hrtime();
+  const beforeScript = process.memoryUsage().heapUsed / 1024 / 1024;
 
+  const sortedData = algorithmInstance.getAlgorithmInstance('sort', algName, key);
 
-  const sortedData = algorithmInstance.getAlgorithmInstance('sort', algName);
-
+  const afterScript = process.memoryUsage().heapUsed / 1024 / 1024;
+  const hrend = process.hrtime(hrstart);
+  
+  console.log(`${algName} exectuion time is: ${hrend} ms`);
+  console.log(`${algName} uses ${Math.round((afterScript - beforeScript) * 100) / 100} MB`);
 
   res.send(sortedData); 
 })
-app.get('/alg/search/:algName', (req, res) => {
-  const { algName } = req.params;
+app.get('/alg/search/:algName/:key&:keyValue', (req, res) => {
+  const { algName, key, keyValue } = req.params;
+  const hrstart = process.hrtime();
+  const beforeScript = process.memoryUsage().heapUsed / 1024 / 1024;
 
-  algorithmInstance.getAlgorithmInstance('search', algName);
+  const foundMoviesList = algorithmInstance.getAlgorithmInstance('search', algName, key, keyValue);
 
-  res.send(sortedData);
+  const afterScript = process.memoryUsage().heapUsed / 1024 / 1024;
+  const hrend = process.hrtime(hrstart);
+
+  console.log(`${algName} exectuion time is: ${hrend} ms`);
+  console.log(`${algName} uses ${Math.round((afterScript - beforeScript) * 100) / 100} MB`);
+  res.send(foundMoviesList);
 })
 
 app.get('/movies', (req, res) => {
