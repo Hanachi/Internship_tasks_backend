@@ -1,5 +1,7 @@
-const SortingAlgorithms = require('./sorting/sortingAlg');
-const SearchingAlgorithms = require('./searching/searchingAlg');
+'use strict';
+
+const { SortingAlgorithms } = require('./sorting/sortingAlg');
+const { SearchingAlgorithms } = require('./searching/searchingAlg');
 
 class FactoryAlgorithms {
   constructor() {
@@ -7,13 +9,13 @@ class FactoryAlgorithms {
     this.searching = new SearchingAlgorithms();
   }
 
-  getAlgorithmInstance(type, algorithm) {
+  getAlgorithmInstance(type, algorithm, key, keyValue) {
     switch(type) {
       case 'sort': {
-        return this.sorting.execute(algorithm);
+        return this.sorting.execute(algorithm, key, keyValue);
       }
       case 'search': {
-        return this.searching.execute(algorithm);
+        return this.searching.execute(algorithm, key, keyValue);
       }
     }
 
@@ -23,4 +25,4 @@ class FactoryAlgorithms {
 
 }
 
-export default FactoryAlgorithms;
+module.exports = { FactoryAlgorithms };
