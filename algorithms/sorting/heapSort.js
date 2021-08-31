@@ -1,12 +1,13 @@
+'use strict';
+
 const { AbstractAlgorithms } = require('../abstractAlgorithms');
-
 class HeapSort extends AbstractAlgorithms {
-	heapSort(array) {
-		let size = array.length;
-
+	heapSort(array, key) {
+		const size = array.length;
+		const sortKey = key;
 		// build heapSort (rearrange array)
 		for (let i = Math.floor(size / 2 - 1); i >= 0; i--)
-			this.heapify(array, size, i);
+			this.heapify(array, size, i, sortKey);
 
 		// one by one extract an element from heapSort
 		for (let i = size - 1; i >= 0; i--) {
@@ -16,23 +17,23 @@ class HeapSort extends AbstractAlgorithms {
 			array[i] = temp;
 
 			// call max heapify on the reduced heapSort
-			this.heapify(array, i, 0);
+			this.heapify(array, i, 0, sortKey);
 		}
 		return array;
 	}
 
 	// to heapify a subtree rooted with node i which is an index in array[]
-	heapify(array, size, i) {
+	heapify(array, size, i, sortKey) {
 		let max = i; // initialize max as root
 		let left = 2 * i + 1;
 		let right = 2 * i + 2;
 
 		// if left child is larger than root
-		if (left < size && array[left].title.length > array[max].title.length)
+		if (left < size && array[left][sortKey] > array[max][sortKey])
 			max = left;
 
 		// if right child is larger than max
-		if (right < size && array[right].title.length > array[max].title.length)
+		if (right < size && array[right][sortKey] > array[max][sortKey])
 			max = right;
 
 		// if max is not root
@@ -43,12 +44,12 @@ class HeapSort extends AbstractAlgorithms {
 			array[max] = temp;
 
 			// recursively heapify the affected sub-tree
-			this.heapify(array, size, max);
+			this.heapify(array, size, max, sortKey);
 		}
 		return array;
 	}
-	execute() {
-		return this.heapSort(this.getMovies());
+	execute(key) {
+		return this.heapSort(this.getMovies(), key);
 	}
 }
 module.exports = { HeapSort };
