@@ -1,7 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Put, Res } from '@nestjs/common';
-import { Response } from 'express';
-import { createReadStream } from 'fs';
-import { join } from 'path';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Put } from '@nestjs/common';
 
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
@@ -14,8 +11,8 @@ export class MoviesController {
 	}
 
 	@Get()
-	getAllMovies(@Res() res: Response): any {
-		return this.moviesService.getAllMovies(res);
+	getAllMovies(): any {
+		return this.moviesService.getAllMovies();
 	}
 
 	@Get(':id')
@@ -26,16 +23,16 @@ export class MoviesController {
 	@Post()
 	@HttpCode(HttpStatus.CREATED)
 	create(@Body() createMovie: CreateMovieDto) {
-		return this.moviesService.create(createMovie)
+		return this.moviesService.create(createMovie);
 	}
-
+	
 	@Delete(':id')
 	remove(@Param('id') id: string) {
-		return 'Remove ' + id;
+		return this.moviesService.remove(id);
 	}
-
-	@Put(':id')
+	
+	@Patch(':id')
 	update(@Body() updateMovie: UpdateMovieDto, @Param('id') id: string) {
-		return 'Update ' + id;
+		return this.moviesService.update(updateMovie, id);
 	}
 }
