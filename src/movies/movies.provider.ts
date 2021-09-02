@@ -23,7 +23,10 @@ export class MoviesDataSource {
 	}
 
 	add(movieDto: CreateMovieDto) {
-		return this.movies.push(movieDto);
+		return this.movies.push({
+			...movieDto,
+			id: Date.now().toString()
+		});
 	}
 
 	updateMovie(updateMovieDto: UpdateMovieDto, id: string) {
@@ -37,7 +40,8 @@ export class MoviesDataSource {
 	}
 
 	delete(id: string) {
-		const index = this.movies.indexOf(id);
-		return this.movies.splice(index);
+		const movie = this.getMovie(id)
+		const index = this.movies.indexOf(movie);
+		return this.movies.splice(index, 1);
 	}
 }
