@@ -9,29 +9,22 @@ export class MoviesService {
 		
 	}
 	getAllMovies() {
-		return this.moviesProvider.getMovies();
+		return this.moviesProvider.get();
 	}
 
 	getById(id: string) {
-		return this.moviesProvider.movies.find(movie => movie.title == id);
+		return this.moviesProvider.getMovie(id);
 	}
 
 	create(movieDto: CreateMovieDto) {
-		this.moviesProvider.movies.push(movieDto);
+		this.moviesProvider.add(movieDto);
 	}
 
 	update(updateMovieDto: UpdateMovieDto, id: string) {
-		this.moviesProvider.movies = this.moviesProvider.movies.map((el) => {
-			if(el.title == id) {
-				return { ...el, ...updateMovieDto }
-			}
-			return el;
-		})
-		return this.moviesProvider.movies;
+		return this.moviesProvider.updateMovie(updateMovieDto, id);
 	}
 
 	remove(id: string) {
-		const index = this.moviesProvider.movies.indexOf(id);
-		return this.moviesProvider.movies.splice(index);
+		return this.moviesProvider.delete(id);
 	}
 }
