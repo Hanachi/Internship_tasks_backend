@@ -23,7 +23,7 @@ export class MoviesDataSource {
 	}
 
 	add(movieDto: CreateMovieDto) {
-		return this.movies.push({
+		return this.movies.unshift({
 			...movieDto,
 			id: Date.now().toString()
 		});
