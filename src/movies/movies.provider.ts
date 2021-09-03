@@ -36,7 +36,6 @@ export class MoviesDataSource {
 			}
 			return el;
 		})
-		return this.movies;
 	}
 
 	delete(id: string) {
