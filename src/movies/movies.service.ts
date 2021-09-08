@@ -10,8 +10,8 @@ export class MoviesService {
 	) {
 		
 	}
-	getAllMovies() {
-		return this.moviesProvider.get();
+	getAllMovies(query: string) {
+		return this.moviesProvider.get(query);
 	}
 
 	getById(id: string) {
