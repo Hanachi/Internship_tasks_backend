@@ -12,19 +12,30 @@ export class MoviesDataSource {
 		@InjectModel(Movie.name) private movieModel: Model<MovieDocument>,
 	) {}
 
-	async get(query: string): Promise<Movie[]> {
+	async get(query): Promise<Object> {
+		const LIMIT = Number(query.rowsPerPage);
+		const startIndex = (query.page == 0) ? 0 : (Number(query.page)) * LIMIT;
+		const total = await this.movieModel.find({
+			$or:
+				[
+					{ 'title': { '$regex': query.search || '', '$options': 'i' } },
+					{ 'year': { '$regex': query.search || '', '$options': 'i' } },
+					{ 'year': Number(query.search) },
+					{ 'genres': { '$regex': query.search || '', '$options': 'i' } },
+					{ 'actors': { '$regex': query.search || '', '$options': 'i' } },
+				]
+		})
 		const movies = await this.movieModel.find({ $or:
 		[
-			{ '_id': { '$regex': query || '', '$options': 'i' } },
-			{ 'title': { '$regex': query || '', '$options': 'i' } },
-			{ 'year': { '$regex': query || '', '$options': 'i' } },
-			{ 'genres': { '$regex': query || '', '$options': 'i' } },
-			{ 'actors': { '$regex': query || '', '$options': 'i' } },
-			{ 'storyline': { '$regex': query || '', '$options': 'i' } },
+			{ 'title': { '$regex': query.search || '', '$options': 'i' } },
+			{ 'year':  { '$regex': query.search || '', '$options': 'i' } },
+			{ 'year':  Number(query.search ) },
+			{ 'genres': { '$regex': query.search  || '', '$options': 'i' } },
+			{ 'actors': { '$regex': query.search  || '', '$options': 'i' } },
+		] }).limit(LIMIT).skip(startIndex)
+		const result = { data: movies, page: Number(query.page), rowsPerPage: query.rowsPerPage, count: total.length}
 
-		] });
-
-		return movies;
+		return result;
 	}
 
 	async getMovie(id: string): Promise<Movie> {
