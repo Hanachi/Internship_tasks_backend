@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -9,10 +9,12 @@ import { Movie } from "./schemas/movies.schema";
 @ApiTags('movies')
 @Controller('movies')
 export class MoviesController {
-	constructor(private readonly moviesService: MoviesService) {
+	constructor(private readonly moviesService: MoviesService) {}
 
-	}
-
+	/**
+	 * return all movies data from DB
+	 * @returns Promise<Object> 
+	 */
 	@Get()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponse({ 
@@ -20,10 +22,15 @@ export class MoviesController {
 		description: 'Movie data successfully received',
 		isArray: true
 	})
-	getAllMovies(): Promise<Movie[]> {
-		return this.moviesService.getAllMovies();
+	getAllMovies(@Query() query): Promise<Object> {
+		return this.moviesService.getAllMovies(query);
 	}
-
+	
+	/**
+	 * 
+	 * @param id 
+	 * @returns Pro
+	 */
 	@Get(':id')
 	@ApiResponse({ status: 200, description: 'The movie has been found by id.' })
 	@HttpCode(HttpStatus.OK)

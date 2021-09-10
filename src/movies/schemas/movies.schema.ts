@@ -6,12 +6,12 @@ export type MovieDocument = Movie & Document;
 @Schema()
 export class Movie {
 	@Prop()
-	id: string;
+	id?: string;
 
 	@Prop()
 	title: string;
 
-	@Prop()
+	@Prop(Number)
 	year: number;
 
 	@Prop([String])

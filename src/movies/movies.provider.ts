@@ -11,9 +11,31 @@ export class MoviesDataSource {
 	constructor(
 		@InjectModel(Movie.name) private movieModel: Model<MovieDocument>,
 	) {}
-	
-	async get(): Promise<Movie[]> {
-		return this.movieModel.find().exec();
+
+	async get(query): Promise<Object> {
+		const LIMIT = Number(query.rowsPerPage);
+		const startIndex = (query.page == 0) ? 0 : (Number(query.page)) * LIMIT;
+		const total = await this.movieModel.find({
+			$or:
+				[
+					{ 'title': { '$regex': query.search || '', '$options': 'i' } },
+					{ 'year': { '$regex': query.search || '', '$options': 'i' } },
+					{ 'year': Number(query.search) },
+					{ 'genres': { '$regex': query.search || '', '$options': 'i' } },
+					{ 'actors': { '$regex': query.search || '', '$options': 'i' } },
+				]
+		})
+		const movies = await this.movieModel.find({ $or:
+		[
+			{ 'title': { '$regex': query.search || '', '$options': 'i' } },
+			{ 'year':  { '$regex': query.search || '', '$options': 'i' } },
+			{ 'year':  Number(query.search ) },
+			{ 'genres': { '$regex': query.search  || '', '$options': 'i' } },
+			{ 'actors': { '$regex': query.search  || '', '$options': 'i' } },
+		] }).limit(LIMIT).skip(startIndex)
+		const result = { data: movies, page: Number(query.page), rowsPerPage: query.rowsPerPage, count: total.length}
+
+		return result;
 	}
 
 	async getMovie(id: string): Promise<Movie> {
