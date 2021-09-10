@@ -5,11 +5,13 @@ import { UpdateMovieDto } from "./dto/update-movie.dto";
 import { MoviesDataSource } from "./movies.provider";
 @Injectable()
 export class MoviesService {
-	constructor(private readonly moviesProvider: MoviesDataSource) {
+	constructor(
+		private readonly moviesProvider: MoviesDataSource,
+	) {
 		
 	}
-	getAllMovies() {
-		return this.moviesProvider.get();
+	getAllMovies(query) {
+		return this.moviesProvider.get(query);
 	}
 
 	getById(id: string) {
@@ -17,7 +19,7 @@ export class MoviesService {
 	}
 
 	create(movieDto: CreateMovieDto) {
-		this.moviesProvider.add(movieDto);
+		return this.moviesProvider.add(movieDto);
 	}
 
 	update(updateMovieDto: UpdateMovieDto, id: string) {
