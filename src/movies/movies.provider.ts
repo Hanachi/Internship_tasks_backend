@@ -1,46 +1,57 @@
 import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from 'mongoose';
 
-import * as DATA_FROM_JSON from "../../movies.json";
 import { CreateMovieDto } from "./dto/create-movie.dto";
 import { UpdateMovieDto } from "./dto/update-movie.dto";
+import { Movie, MovieDocument } from "./schemas/movies.schema";
 
 @Injectable()
 export class MoviesDataSource {
-	public movies: any = DATA_FROM_JSON;
-	constructor() {
-		this.movies.map((movie, i) => {
-			movie.id = (new Date()).getTime() + i;
+	constructor(
+		@InjectModel(Movie.name) private movieModel: Model<MovieDocument>,
+	) {}
+
+	async get(query): Promise<Object> {
+		const LIMIT = Number(query.rowsPerPage);
+		const startIndex = (query.page == 0) ? 0 : (Number(query.page)) * LIMIT;
+		const total = await this.movieModel.find({
+			$or:
+				[
+					{ 'title': { '$regex': query.search || '', '$options': 'i' } },
+					{ 'year': { '$regex': query.search || '', '$options': 'i' } },
+					{ 'year': Number(query.search) },
+					{ 'genres': { '$regex': query.search || '', '$options': 'i' } },
+					{ 'actors': { '$regex': query.search || '', '$options': 'i' } },
+				]
 		})
-	}
-	
-	
-	get() {
-		return this.movies;
+		const movies = await this.movieModel.find({ $or:
+		[
+			{ 'title': { '$regex': query.search || '', '$options': 'i' } },
+			{ 'year':  { '$regex': query.search || '', '$options': 'i' } },
+			{ 'year':  Number(query.search ) },
+			{ 'genres': { '$regex': query.search  || '', '$options': 'i' } },
+			{ 'actors': { '$regex': query.search  || '', '$options': 'i' } },
+		] }).limit(LIMIT).skip(startIndex)
+		const result = { data: movies, page: Number(query.page), rowsPerPage: query.rowsPerPage, count: total.length}
+
+		return result;
 	}
 
-	getMovie(id: string) {
-		return this.movies.find(movie => movie.id == id);
+	async getMovie(id: string): Promise<Movie> {
+		return this.movieModel.findById(id);
 	}
 
-	add(movieDto: CreateMovieDto) {
-		return this.movies.unshift({
-			...movieDto,
-			id: Date.now().toString()
-		});
+	async add(movieDto: CreateMovieDto): Promise<Movie> {
+		const newMovie = new this.movieModel(movieDto);
+		return await newMovie.save();
 	}
 
-	updateMovie(updateMovieDto: UpdateMovieDto, id: string) {
-		this.movies = this.movies.map((el) => {
-			if (el.id == id) {
-				return { ...el, ...updateMovieDto }
-			}
-			return el;
-		})
+	async updateMovie(updateMovieDto: UpdateMovieDto, id: string): Promise<Movie> {
+		return this.movieModel.findByIdAndUpdate(id, updateMovieDto, {new: true});
 	}
 
-	delete(id: string) {
-		const movie = this.getMovie(id)
-		const index = this.movies.indexOf(movie);
-		return this.movies.splice(index, 1);
+	async delete(id: string): Promise<Movie> {
+		return this.movieModel.findByIdAndRemove(id);
 	}
 }

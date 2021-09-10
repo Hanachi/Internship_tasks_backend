@@ -8,8 +8,8 @@ import { Movie, MovieSchema } from './schemas/movies.schema';
 
 @Module({
 	imports: [MongooseModule.forFeature([{ name: Movie.name, schema: MovieSchema }])],
+	controllers: [MoviesController],
 	providers: [MoviesService, MoviesDataSource],
-	controllers: [MoviesController]
 })
 
 export class MoviesModule {}
