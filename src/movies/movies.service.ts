@@ -10,7 +10,7 @@ export class MoviesService {
 	) {
 		
 	}
-	getAllMovies(query: string) {
+	getAllMovies(query) {
 		return this.moviesProvider.get(query);
 	}
 

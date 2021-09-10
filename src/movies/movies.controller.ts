@@ -13,7 +13,7 @@ export class MoviesController {
 
 	/**
 	 * return all movies data from DB
-	 * @returns Promise<Movie[]>
+	 * @returns Promise<Object> 
 	 */
 	@Get()
 	@HttpCode(HttpStatus.OK)
@@ -22,10 +22,15 @@ export class MoviesController {
 		description: 'Movie data successfully received',
 		isArray: true
 	})
-	getAllMovies(@Query('query') query: string): Promise<Movie[]> {
+	getAllMovies(@Query() query): Promise<Object> {
 		return this.moviesService.getAllMovies(query);
 	}
 	
+	/**
+	 * 
+	 * @param id 
+	 * @returns Pro
+	 */
 	@Get(':id')
 	@ApiResponse({ status: 200, description: 'The movie has been found by id.' })
 	@HttpCode(HttpStatus.OK)

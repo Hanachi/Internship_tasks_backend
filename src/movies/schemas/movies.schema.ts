@@ -6,8 +6,6 @@ export type MovieDocument = Movie & Document;
 @Schema()
 export class Movie {
 	@Prop()
-	_id: string;
-	@Prop()
 	id?: string;
 
 	@Prop()
