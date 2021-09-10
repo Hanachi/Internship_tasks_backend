@@ -1,26 +1,30 @@
 import { Injectable } from "@nestjs/common";
+
 import { CreateMovieDto } from "./dto/create-movie.dto";
-
-import { Response } from 'express';
-
-import * as DATA_FROM_JSON from "../../movies.json";
-
+import { UpdateMovieDto } from "./dto/update-movie.dto";
+import { MoviesDataSource } from "./movies.provider";
 @Injectable()
 export class MoviesService {
-	private movies = [];
-
-	getAllMovies(res: Response) {
-		return res.json(DATA_FROM_JSON);
+	constructor(private readonly moviesProvider: MoviesDataSource) {
+		
+	}
+	getAllMovies() {
+		return this.moviesProvider.get();
 	}
 
 	getById(id: string) {
-		return this.movies.find(m => m.id === id);
+		return this.moviesProvider.getMovie(id);
 	}
 
 	create(movieDto: CreateMovieDto) {
-		this.movies.push({
-			...movieDto,
-			id: Date.now().toString()
-		})
+		this.moviesProvider.add(movieDto);
+	}
+
+	update(updateMovieDto: UpdateMovieDto, id: string) {
+		return this.moviesProvider.updateMovie(updateMovieDto, id);
+	}
+
+	remove(id: string) {
+		return this.moviesProvider.delete(id);
 	}
 }
