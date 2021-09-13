@@ -18,6 +18,10 @@ export class MoviesService {
 		return this.moviesProvider.getMovie(id);
 	}
 
+	getStatistics() {
+		return this.moviesProvider.getMoviesStatistics();
+	}
+
 	create(movieDto: CreateMovieDto) {
 		return this.moviesProvider.add(movieDto);
 	}

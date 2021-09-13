@@ -26,10 +26,14 @@ export class MoviesController {
 		return this.moviesService.getAllMovies(query);
 	}
 	
+	@Get('/ratings')
+	getInfo() {
+		return this.moviesService.getStatistics();
+	}
 	/**
-	 * 
+	 * return movie by id
 	 * @param id 
-	 * @returns Pro
+	 * @returns Promise<Movie>
 	 */
 	@Get(':id')
 	@ApiResponse({ status: 200, description: 'The movie has been found by id.' })
@@ -37,6 +41,7 @@ export class MoviesController {
 	getOneMovie(@Param('id') id: string): Promise<Movie> {
 		return this.moviesService.getById(id);
 	}
+
 
 	@Post()
 	@HttpCode(HttpStatus.CREATED)
