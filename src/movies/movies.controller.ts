@@ -26,7 +26,7 @@ export class MoviesController {
 		return this.moviesService.getAllMovies(query);
 	}
 	
-	@Get('/ratings')
+	@Get('/statistic')
 	getInfo() {
 		return this.moviesService.getStatistics();
 	}

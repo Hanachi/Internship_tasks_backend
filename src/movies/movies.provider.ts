@@ -45,19 +45,34 @@ export class MoviesDataSource {
 	}
 
 	async getMoviesStatistics() {
-		const allGenres = this.movieModel.distinct('genres');
+		const allGenres = await this.movieModel.distinct('genres');
 
-		const avgByTitle = this.movieModel.aggregate([
+		const avgByYear = await this.movieModel.aggregate([
 			{ $unwind: "$ratings" },
 			{ 
 				$group: {
 				 _id: '$year',
-				 avgRating: {$avg: '$ratings'},
+				 avgRatingYear: {$avg: '$ratings'},
+				}
+			},
+		]);
+		const avgByTitle = await this.movieModel.aggregate([
+			{ $unwind: "$ratings" },
+			{
+				$group: {
+					_id: '$title',
+					avgRatingTitle: { $avg: '$ratings' },
 				}
 			},
 		]);
 
-		return avgByTitle;
+		const statistic = {
+			avgByYear: avgByYear,
+			avgByTitle: avgByTitle,
+			genres: allGenres
+		}
+		
+		return statistic;
 	}
 
 	async add(movieDto: CreateMovieDto): Promise<Movie> {
