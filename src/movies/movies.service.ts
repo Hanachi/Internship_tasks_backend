@@ -1,36 +1,36 @@
-// import { Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
 
-// import { CreateMovieDto } from "./dto/create-movie.dto";
-// import { UpdateMovieDto } from "./dto/update-movie.dto";
-// import { MoviesDataSource } from "./movies.provider";
-// @Injectable()
-// export class MoviesService {
-// 	constructor(
-// 		private readonly moviesProvider: MoviesDataSource,
-// 	) {
+import { CreateMovieDto } from "./dto/create-movie.dto";
+import { UpdateMovieDto } from "./dto/update-movie.dto";
+import { MoviesDataSource } from "./movies.provider";
+@Injectable()
+export class MoviesService {
+	constructor(
+		private readonly moviesProvider: MoviesDataSource
+	) {
 		
-// 	}
-// 	getAllMovies(query) {
-// 		return this.moviesProvider.get(query);
-// 	}
+	}
+	getAllMovies(query) {
+		return this.moviesProvider.get(query);
+	}
 
-// 	getById(id: string) {
-// 		return this.moviesProvider.getMovie(id);
-// 	}
+	// getById(id: string) {
+	// 	return this.moviesRepository.getMovie(id);
+	// }
 
-// 	getStatistics() {
-// 		return this.moviesProvider.getMoviesStatistics();
-// 	}
+	// getStatistics() {
+	// 	return this.moviesRepository.getMoviesStatistics();
+	// }
 
-// 	create(movieDto: CreateMovieDto) {
-// 		return this.moviesProvider.add(movieDto);
-// 	}
+	// create(movieDto: CreateMovieDto) {
+	// 	return this.moviesRepository.add(movieDto);
+	// }
 
-// 	update(updateMovieDto: UpdateMovieDto, id: string) {
-// 		return this.moviesProvider.updateMovie(updateMovieDto, id);
-// 	}
+	// update(updateMovieDto: UpdateMovieDto, id: string) {
+	// 	return this.moviesRepository.updateMovie(updateMovieDto, id);
+	// }
 
-// 	remove(id: string) {
-// 		return this.moviesProvider.delete(id);
-// 	}
-// }
+	// remove(id: string) {
+	// 	return this.moviesRepository.delete(id);
+	// }
+}

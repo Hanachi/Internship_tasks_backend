@@ -1,15 +1,17 @@
-// import { Module } from "@nestjs/common";
-// import { MongooseModule } from '@nestjs/mongoose';
+import { Module } from "@nestjs/common";
+import { MoviesService } from "./movies.service";
+import { TypeOrmModule } from "@nestjs/typeorm";
 
-// import { MoviesController } from "./movies.controller";
-// import { MoviesDataSource } from "./movies.provider";
-// import { MoviesService } from "./movies.service";
-// import { Movie, MovieSchema } from './schemas/movies.schema';
+import { MoviesController } from "./movies.controller";
+import { MoviesDataSource } from "./movies.provider";
 
-// @Module({
-// 	imports: [MongooseModule.forFeature([{ name: Movie.name, schema: MovieSchema }])],
-// 	controllers: [MoviesController],
-// 	providers: [MoviesService, MoviesDataSource],
-// })
+import { Movie } from "./entities/movies.entity";
 
-// export class MoviesModule {}
+@Module({
+	imports: [TypeOrmModule.forFeature([Movie])],
+	exports: [TypeOrmModule],
+	controllers: [MoviesController],
+	providers: [MoviesService, MoviesDataSource],
+})
+
+export class MoviesModule {}

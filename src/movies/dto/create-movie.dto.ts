@@ -4,10 +4,10 @@ export class CreateMovieDto {
 	readonly title: string
 	@ApiProperty({ type: Number, description: 'year' })
 	readonly year: number
-	@ApiProperty({ type: Array, description: 'genres' })
-	readonly genres: string[]
-	@ApiProperty({ type: Array, description: 'ratings' })
-	readonly ratings: number[]
+	@ApiProperty({ type: String, description: 'genres' })
+	readonly genres: string
+	@ApiProperty({ type: Number, description: 'ratings' })
+	readonly ratings: number
 	@ApiProperty({ type: String, description: 'poster' })
 	readonly poster: string
 	@ApiProperty({ type: String, description: 'contentRating' })
@@ -22,8 +22,8 @@ export class CreateMovieDto {
 	readonly originalTitle: string
 	@ApiProperty({ type: String, description: 'storyline' })
 	readonly storyline: string
-	@ApiProperty({ type: Array, description: 'actors' })
-	readonly actors: string[]
+	@ApiProperty({ type: String, description: 'actors' })
+	readonly actors: string
 	@ApiProperty({ type: String, description: 'imdbRating' })
 	readonly imdbRating: string
 	@ApiProperty({ type: String, description: 'posterurl' })
