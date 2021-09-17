@@ -22,20 +22,20 @@ export class MoviesDataSource {
 				[
 					{ 'title': { '$regex': query.search || '', '$options': 'i' } },
 					{ 'year': { '$regex': query.search || '', '$options': 'i' } },
-					{ 'year': Number(query.search) },
 					{ 'genres': { '$regex': query.search || '', '$options': 'i' } },
 					{ 'actors': { '$regex': query.search || '', '$options': 'i' } },
 				]
 		});
-		const movies = await this.movieModel.find({ $or:
-		[
-			{ 'title': { '$regex': query.search || '', '$options': 'i' } },
-			{ 'year':  { '$regex': query.search || '', '$options': 'i' } },
-			{ 'year':  Number(query.search ) },
-			{ 'genres': { '$regex': query.search  || '', '$options': 'i' } },
-			{ 'actors': { '$regex': query.search  || '', '$options': 'i' } },
-		] }).limit(LIMIT).skip(startIndex).sort([[orderBy, orderDirection]]);
-		const result = { data: movies, page: Number(query.page), rowsPerPage: query.rowsPerPage, count: total}
+		const movies = await this.movieModel.find({
+			$or:
+				[
+					{ 'title': { '$regex': query.search || '', '$options': 'i' } },
+					{ 'year': { '$regex': query.search || '', '$options': 'i' } },
+					{ 'genres': { '$regex': query.search || '', '$options': 'i' } },
+					{ 'actors': { '$regex': query.search || '', '$options': 'i' } },
+				]
+		}).limit(LIMIT).skip(startIndex).sort([[orderBy, orderDirection]]);
+		const result = { data: movies, page: Number(query.page), rowsPerPage: query.rowsPerPage, count: total }
 
 		return result;
 	}

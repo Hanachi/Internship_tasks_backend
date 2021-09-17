@@ -11,8 +11,8 @@ export class Movie {
 	@Prop()
 	title: string;
 
-	@Prop(Number)
-	year: number;
+	@Prop()
+	year: string;
 
 	@Prop([String])
 	genres: string[];
