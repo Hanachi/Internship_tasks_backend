@@ -14,23 +14,27 @@ export class MoviesService {
 		return this.moviesProvider.get(query);
 	}
 
-	// getById(id: string) {
-	// 	return this.moviesRepository.getMovie(id);
-	// }
+	migrate() {
+		return this.moviesProvider.migrateData();
+	}
+
+	getById(id: string) {
+		return this.moviesProvider.getMovie(id);
+	}
 
 	// getStatistics() {
 	// 	return this.moviesRepository.getMoviesStatistics();
 	// }
 
-	// create(movieDto: CreateMovieDto) {
-	// 	return this.moviesRepository.add(movieDto);
-	// }
+	create(movieDto: CreateMovieDto) {
+		return this.moviesProvider.add(movieDto);
+	}
 
-	// update(updateMovieDto: UpdateMovieDto, id: string) {
-	// 	return this.moviesRepository.updateMovie(updateMovieDto, id);
-	// }
+	update(updateMovieDto: UpdateMovieDto, id: string) {
+		return this.moviesProvider.updateMovie(updateMovieDto, id);
+	}
 
-	// remove(id: string) {
-	// 	return this.moviesRepository.delete(id);
-	// }
+	remove(id: string) {
+		return this.moviesProvider.delete(id);
+	}
 }

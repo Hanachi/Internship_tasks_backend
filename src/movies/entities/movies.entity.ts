@@ -19,56 +19,44 @@ export class Movie {
 	@OneToOne(
 		() => ImdbRatings,
 		(imdbRating: ImdbRatings) => imdbRating.movie,
-		{
-			eager: true,
-			cascade: true
-		}
+		{ cascade: true }
 	)
+	@JoinTable()
 	@JoinColumn()
 	imdbRating: ImdbRatings;
 	
 	@OneToOne(
 		() => ContentRatings,
 		(contentRating: ContentRatings) => contentRating.movie,
-		{
-			eager: true,
-			cascade: true
-		}
+		{ cascade: true }
 	)
 	@JoinColumn()
+	@JoinTable()
 	contentRating: ContentRatings;
 
 	@OneToOne(
 		() => UsersRatings,
 		(usersRating: UsersRatings) => usersRating.movie,
-		{
-			eager: true,
-			cascade: true
-		}
+		{ cascade: true }
 	)
+	@JoinTable()
 	@JoinColumn()
 	usersRating: UsersRatings;
 
 
-	@ManyToMany(
+	@OneToMany(
 		() => Actors,
 		(actors: Actors) => actors.movie,
-		{
-			eager: true,
-			cascade: true
-		}
+		{ cascade: true }
 	)
 	@JoinTable()
 	@JoinColumn()
 	actors: Actors[];
 
-	@ManyToMany(
+	@OneToMany(
 		() => Genres,
 		(genres: Genres) => genres.movie,
-		{
-			eager: true,
-			cascade: true
-		}
+		{ cascade: true }
 	)
 	@JoinTable()
 	@JoinColumn()

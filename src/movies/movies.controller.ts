@@ -5,7 +5,6 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MoviesService } from './movies.service';
 import { Movie } from './entities/movies.entity';
-
 @ApiTags('movies')
 @Controller('movies')
 export class MoviesController {
@@ -22,9 +21,15 @@ export class MoviesController {
 		description: 'Movie data successfully received',
 		isArray: true
 	})
-	getAllMovies(@Query() query): Promise<Movie[]> {
+	getAllMovies(@Query() query): Promise<Object> {
 		return this.moviesService.getAllMovies(query);
 	}
+	
+	@Get('/mig/migrate')
+	mig() {
+		return this.moviesService.migrate();
+	}
+
 	
 	// @Get('/statistic')
 	// getInfo() {
@@ -35,34 +40,34 @@ export class MoviesController {
 	//  * @param id 
 	//  * @returns Promise<Movie>
 	//  */
-	// @Get(':id')
-	// @ApiResponse({ status: 200, description: 'The movie has been found by id.' })
-	// @HttpCode(HttpStatus.OK)
-	// getOneMovie(@Param('id') id: string): Promise<Movie> {
-	// 	return this.moviesService.getById(id);
-	// }
+	@Get(':id')
+	@ApiResponse({ status: 200, description: 'The movie has been found by id.' })
+	@HttpCode(HttpStatus.OK)
+	getOneMovie(@Param('id') id: string): Promise<Movie> {
+		return this.moviesService.getById(id);
+	}
 
 
-	// @Post()
-	// @HttpCode(HttpStatus.CREATED)
-	// @ApiCreatedResponse({ description: 'The movie has been successfully created.' })
-	// @ApiBody({type: CreateMovieDto})
-	// create(@Body() createMovie: CreateMovieDto): Promise<Movie> {
-	// 	return this.moviesService.create(createMovie);
-	// }
+	@Post()
+	@HttpCode(HttpStatus.CREATED)
+	@ApiCreatedResponse({ description: 'The movie has been successfully created.' })
+	@ApiBody({type: CreateMovieDto})
+	create(@Body() createMovie: CreateMovieDto): Promise<Movie> {
+		return this.moviesService.create(createMovie);
+	}
 	
-	// @Delete(':id')
-	// @HttpCode(HttpStatus.OK)
-	// @ApiResponse({ status: 200, description: 'The movie has been successfully deleted.' })
-	// remove(@Param('id') id: string): Promise<Movie>  {
-	// 	return this.moviesService.remove(id);
-	// }
+	@Delete(':id')
+	@HttpCode(HttpStatus.OK)
+	@ApiResponse({ status: 200, description: 'The movie has been successfully deleted.' })
+	remove(@Param('id') id: string)  {
+		return this.moviesService.remove(id);
+	}
 	
-	// @Patch(':id')
-	// @HttpCode(HttpStatus.OK)
-	// @ApiResponse({ status: 200, description: 'The movie has been successfully updated.' })
-	// @ApiBody({ type: UpdateMovieDto })
-	// update(@Body() updateMovie: UpdateMovieDto, @Param('id') id: string): Promise<Movie>  {
-	// 	return this.moviesService.update(updateMovie, id);
-	// }
+	@Patch(':id')
+	@HttpCode(HttpStatus.OK)
+	@ApiResponse({ status: 200, description: 'The movie has been successfully updated.' })
+	@ApiBody({ type: UpdateMovieDto })
+	update(@Body() updateMovie: UpdateMovieDto, @Param('id') id: string): Promise<Movie>  {
+		return this.moviesService.update(updateMovie, id);
+	}
 }

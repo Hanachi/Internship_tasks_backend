@@ -9,6 +9,6 @@ export class ContentRatings {
 	@Column()
 	content_rating: string;
 
-	@OneToOne(() => Movie, (movie: Movie) => movie.contentRating)
+	@OneToOne(() => Movie, (movie: Movie) => movie.contentRating, { onDelete: 'CASCADE' })
 	movie: Movie;
 }

@@ -6,9 +6,9 @@ export class UsersRatings {
 	@PrimaryGeneratedColumn()
 	id: string;
 
-	@Column({ array: true })
-	users_rating: number;
+	@Column('int', { array: true }, )
+	users_rating: number[];
 
-	@OneToOne(() => Movie, (movie: Movie) => movie.usersRating)
+	@OneToOne(() => Movie, (movie: Movie) => movie.usersRating, { onDelete: 'CASCADE' })
 	movie: Movie;
 }

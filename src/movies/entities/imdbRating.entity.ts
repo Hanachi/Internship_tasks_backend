@@ -7,8 +7,12 @@ export class ImdbRatings {
 	id: string;
 
 	@Column()
-	imdb_rating: number;
+	imdb_rating: string;
 
-	@OneToOne(() => Movie, (movie: Movie) => movie.imdbRating)
+	@OneToOne(
+		() => Movie,
+		(movie: Movie) => movie.imdbRating,
+		{ onDelete: 'CASCADE' }
+	)
 	movie: Movie;
 }
