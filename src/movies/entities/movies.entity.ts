@@ -22,7 +22,6 @@ export class Movie {
 		{ cascade: true }
 	)
 	@JoinTable()
-	@JoinColumn()
 	imdbRating: ImdbRatings;
 	
 	@OneToOne(
@@ -30,7 +29,6 @@ export class Movie {
 		(contentRating: ContentRatings) => contentRating.movie,
 		{ cascade: true }
 	)
-	@JoinColumn()
 	@JoinTable()
 	contentRating: ContentRatings;
 
@@ -40,11 +38,10 @@ export class Movie {
 		{ cascade: true }
 	)
 	@JoinTable()
-	@JoinColumn()
 	usersRating: UsersRatings;
 
 
-	@OneToMany(
+	@ManyToMany(
 		() => Actors,
 		(actors: Actors) => actors.movie,
 		{ cascade: true }
@@ -53,7 +50,7 @@ export class Movie {
 	@JoinColumn()
 	actors: Actors[];
 
-	@OneToMany(
+	@ManyToMany(
 		() => Genres,
 		(genres: Genres) => genres.movie,
 		{ cascade: true }

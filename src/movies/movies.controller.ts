@@ -5,6 +5,8 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MoviesService } from './movies.service';
 import { Movie } from './entities/movies.entity';
+import * as fs from 'fs';
+
 @ApiTags('movies')
 @Controller('movies')
 export class MoviesController {
@@ -31,15 +33,15 @@ export class MoviesController {
 	}
 
 	
-	// @Get('/statistic')
-	// getInfo() {
-	// 	return this.moviesService.getStatistics();
-	// }
-	// /**
-	//  * return movie by id
-	//  * @param id 
-	//  * @returns Promise<Movie>
-	//  */
+	@Get('/statistic')
+	getInfo() {
+		return this.moviesService.getStatistics();
+	}
+	/**
+	 * return movie by id
+	 * @param id 
+	 * @returns Promise<Movie>
+	 */
 	@Get(':id')
 	@ApiResponse({ status: 200, description: 'The movie has been found by id.' })
 	@HttpCode(HttpStatus.OK)
