@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, DeleteDateColumn } from 'typeorm';
 import { Movie } from './movies.entity';
 
 @Entity()
@@ -16,4 +16,7 @@ export class UsersRatings {
 	)
 	@JoinColumn()
 	movie: Movie;
+
+	@DeleteDateColumn()
+	deletedAt?: Date;
 }

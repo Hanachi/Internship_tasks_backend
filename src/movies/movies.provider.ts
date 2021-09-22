@@ -66,7 +66,7 @@ export class MoviesDataSource {
 	async migrateData() {
 		const data = fs.readFileSync('./movies.json', 'utf8');
 		const movies = await JSON.parse(data);
-		for(let i = 0; i < movies.length; i++) {
+		for (let i = 0; i < movies.length; i++) {
 
 			const addGenres = await movies[i].genres.map((genre) => {
 				let genres = new Genres();
@@ -81,7 +81,7 @@ export class MoviesDataSource {
 				this.actorsRepository.save(actors);
 				return actors;
 			});
-			
+
 			let imdbRating = new ImdbRatings();
 			let contentRating = new ContentRatings();
 			let usersRating = new UsersRatings();
@@ -107,7 +107,7 @@ export class MoviesDataSource {
 			await this.moviesRepository.save(movie);
 		}
 	}
-
+		
 /**
  * Get movie by id
  * @param id movie id
@@ -120,7 +120,7 @@ export class MoviesDataSource {
 
 /**
  * Return statistic: all genres, average users rating by title, year
- * @returns Promes<Object>
+ * @returns Promise<Object>
  */
 
 	async getMoviesStatistics(): Promise<Object> {
@@ -179,17 +179,16 @@ export class MoviesDataSource {
  * @returns Promise<Movie>
  */
 	async add(movieDto: CreateMovieDto): Promise<Movie> {
-		const createGenres = await movieDto.genres.map((genre) => {
+		
+		const createGenres = movieDto.genres.map((genre) => {
 			let genres = new Genres();
 			genres.name = genre;
-			this.genresRepository.save(genres);
 			return genres;
 		});
 		
 		const createActors = movieDto.actors.map((actor) => {
 			let actors = new Actors();
 			actors.fullname = actor;
-			this.actorsRepository.save(actors);
 			return actors;
 		});
 
@@ -201,32 +200,48 @@ export class MoviesDataSource {
 		contentRating.content_rating = movieDto.contentRating;
 		usersRating.users_rating = movieDto.usersRating;
 
-		const imdbR = await this.imdbRatingRepository.save(imdbRating);
-		const contentR = await this.contentRatingRepository.save(contentRating);
-		const usersR = await this.usersRatingRepository.save(usersRating);
-
 		
 		let movie = new Movie();
 		movie.title = movieDto.title;
 		movie.year = movieDto.year;
 		movie.genres = createGenres;
 		movie.actors = createActors;
-		movie.imdbRating = imdbR;
-		movie.contentRating = contentR;
-		movie.usersRating = usersR;
+		movie.imdbRating = imdbRating;
+		movie.contentRating = contentRating;
+		movie.usersRating = usersRating;
+
 		return await this.moviesRepository.save(movie);
 	}
 
-	async updateMovie(updateMovieDto, id: string): Promise<Movie> {
-		await this.moviesRepository.update(id, updateMovieDto);
-		const updatedPost = await this.moviesRepository.findOne(id);
-		if (updatedPost) {
-			console.log(updateMovieDto)
-			return updatedPost
-		}
+	async updateMovie(updateMovieDto: UpdateMovieDto, id: string): Promise<Movie> {
+		const postToUpdate = await this.moviesRepository.findOne(id, { relations: ['genres', 'actors', 'imdbRating', 'contentRating', 'usersRating'] });
+
+		const updateGenres = updateMovieDto.genres.map((genre) => {
+			let genres = new Genres();
+			genres.name = genre;
+			return genres;
+		});
+
+		const updateActors = updateMovieDto.actors.map((actor) => {
+			let actors = new Actors();
+			actors.fullname = actor;
+			return actors;
+		});
+
+
+		postToUpdate.title = updateMovieDto.title;
+		postToUpdate.year = updateMovieDto.year;
+		postToUpdate.genres = updateGenres;
+		postToUpdate.actors = updateActors;
+		postToUpdate.imdbRating.imdb_rating = updateMovieDto.imdbRating;
+		postToUpdate.contentRating.content_rating = updateMovieDto.contentRating;
+		postToUpdate.usersRating.users_rating = updateMovieDto.usersRating;
+
+		return this.moviesRepository.save(postToUpdate);
 	}
 
 	async delete(id: string) {
-		return await this.moviesRepository.delete(id)
+		const movieToRemove = await this.moviesRepository.findOne(id, { relations: ['genres', 'actors', 'imdbRating', 'contentRating', 'usersRating'] });
+		return await this.moviesRepository.softRemove(movieToRemove)
 	}
 }

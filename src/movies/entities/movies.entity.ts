@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, ManyToOne, ManyToMany, OneToOne, JoinTable } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, ManyToOne, ManyToMany, OneToOne, JoinTable, DeleteDateColumn } from 'typeorm';
 import { Actors } from './actors.entity';
 import { ContentRatings } from './contentRating.entity';
 import { Genres } from './genres.entity';
@@ -21,7 +21,6 @@ export class Movie {
 		(imdbRating: ImdbRatings) => imdbRating.movie,
 		{ cascade: true }
 	)
-	@JoinTable()
 	imdbRating: ImdbRatings;
 	
 	@OneToOne(
@@ -29,7 +28,6 @@ export class Movie {
 		(contentRating: ContentRatings) => contentRating.movie,
 		{ cascade: true }
 	)
-	@JoinTable()
 	contentRating: ContentRatings;
 
 	@OneToOne(
@@ -37,7 +35,6 @@ export class Movie {
 		(usersRating: UsersRatings) => usersRating.movie,
 		{ cascade: true }
 	)
-	@JoinTable()
 	usersRating: UsersRatings;
 
 
@@ -47,7 +44,6 @@ export class Movie {
 		{ cascade: true }
 	)
 	@JoinTable()
-	@JoinColumn()
 	actors: Actors[];
 
 	@ManyToMany(
@@ -56,6 +52,8 @@ export class Movie {
 		{ cascade: true }
 	)
 	@JoinTable()
-	@JoinColumn()
 	genres: Genres[];
+
+	@DeleteDateColumn()
+	deletedAt?: Date;
 }

@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, ManyToOne, OneToMany, DeleteDateColumn } from 'typeorm';
 import { Movie } from './movies.entity';
 
 @Entity()
@@ -15,4 +15,7 @@ export class Genres {
 		{ onDelete: 'CASCADE', onUpdate: 'CASCADE' }
 	)
 	movie: Movie;
+
+	@DeleteDateColumn()
+	deletedAt?: Date;
 }
