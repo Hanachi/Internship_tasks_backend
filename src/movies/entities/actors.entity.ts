@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, ManyToOne, ManyToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, ManyToOne, OneToOne, OneToMany, DeleteDateColumn } from 'typeorm';
 import { Movie } from './movies.entity';
 
 @Entity()
@@ -7,14 +7,14 @@ export class Actors {
 	id: string;
 
 	@Column()
-	first_name: string;
-
-	@Column()
-	last_Name: string;
+	fullname: string;
 
 	@ManyToMany(
 		() => Movie,
-		(movie: Movie) => movie.actors
+		(movie: Movie) => movie.actors,
+		{ onDelete: 'CASCADE', onUpdate: 'CASCADE' }
 	)
 	movie: Movie;
+	@DeleteDateColumn()
+	deletedAt?: Date;
 }

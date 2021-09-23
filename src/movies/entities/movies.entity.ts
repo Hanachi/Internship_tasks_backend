@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, ManyToOne, ManyToMany, OneToOne, JoinTable } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, ManyToOne, ManyToMany, OneToOne, JoinTable, DeleteDateColumn } from 'typeorm';
 import { Actors } from './actors.entity';
 import { ContentRatings } from './contentRating.entity';
 import { Genres } from './genres.entity';
@@ -19,58 +19,41 @@ export class Movie {
 	@OneToOne(
 		() => ImdbRatings,
 		(imdbRating: ImdbRatings) => imdbRating.movie,
-		{
-			eager: true,
-			cascade: true
-		}
+		{ cascade: true }
 	)
-	@JoinColumn()
 	imdbRating: ImdbRatings;
 	
 	@OneToOne(
 		() => ContentRatings,
 		(contentRating: ContentRatings) => contentRating.movie,
-		{
-			eager: true,
-			cascade: true
-		}
+		{ cascade: true }
 	)
-	@JoinColumn()
 	contentRating: ContentRatings;
 
 	@OneToOne(
 		() => UsersRatings,
 		(usersRating: UsersRatings) => usersRating.movie,
-		{
-			eager: true,
-			cascade: true
-		}
+		{ cascade: true }
 	)
-	@JoinColumn()
 	usersRating: UsersRatings;
 
 
 	@ManyToMany(
 		() => Actors,
 		(actors: Actors) => actors.movie,
-		{
-			eager: true,
-			cascade: true
-		}
+		{ cascade: true }
 	)
 	@JoinTable()
-	@JoinColumn()
 	actors: Actors[];
 
 	@ManyToMany(
 		() => Genres,
 		(genres: Genres) => genres.movie,
-		{
-			eager: true,
-			cascade: true
-		}
+		{ cascade: true }
 	)
 	@JoinTable()
-	@JoinColumn()
 	genres: Genres[];
+
+	@DeleteDateColumn()
+	deletedAt?: Date;
 }
