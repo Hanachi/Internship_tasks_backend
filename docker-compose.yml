@@ -1,20 +1,21 @@
 version: "3"
 services:
-  # main: 
-  #   container_name: main
-  #   build:
-  #     context: .
-  #   volumes:
-  #   - .:/app
-  #   - /app/node_modules
-  #   ports:
-  #   - 5000:5000
-  #   env_file:
-  #   - .env
-  #   command: npm run start:dev
-  #   depends_on: 
-  #     - postgres
-  #   restart: always
+  main: 
+    container_name: main
+    image: node:12
+    volumes:
+    - .:/app
+    ports:
+    - 5000:5000
+    networks:
+    - server-net
+    env_file:
+    - .env
+    working_dir: /app
+    command: npm run start:dev
+    depends_on: 
+      - postgres
+    restart: always
 
   postgres:
     container_name: postgres
