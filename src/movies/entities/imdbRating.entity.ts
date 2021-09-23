@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, JoinTable, DeleteDateColumn } from 'typeorm';
 import { Movie } from './movies.entity';
 
 @Entity()
@@ -14,5 +14,9 @@ export class ImdbRatings {
 		(movie: Movie) => movie.imdbRating,
 		{ onDelete: 'CASCADE' }
 	)
+	@JoinColumn()
 	movie: Movie;
+
+	@DeleteDateColumn()
+	deletedAt?: Date;
 }
