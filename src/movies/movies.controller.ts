@@ -4,7 +4,8 @@ import { ApiBody, ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagg
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MoviesService } from './movies.service';
-import { Movie } from "./schemas/movies.schema";
+import { Movie } from './entities/movies.entity';
+import * as fs from 'fs';
 
 @ApiTags('movies')
 @Controller('movies')
@@ -25,6 +26,12 @@ export class MoviesController {
 	getAllMovies(@Query() query): Promise<Object> {
 		return this.moviesService.getAllMovies(query);
 	}
+	
+	@Get('/mig/migrate')
+	mig() {
+		return this.moviesService.migrate();
+	}
+
 	
 	@Get('/statistic')
 	getInfo() {
@@ -54,7 +61,7 @@ export class MoviesController {
 	@Delete(':id')
 	@HttpCode(HttpStatus.OK)
 	@ApiResponse({ status: 200, description: 'The movie has been successfully deleted.' })
-	remove(@Param('id') id: string): Promise<Movie>  {
+	remove(@Param('id') id: string)  {
 		return this.moviesService.remove(id);
 	}
 	

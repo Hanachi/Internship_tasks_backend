@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
 
 import { CreateMovieDto } from "./dto/create-movie.dto";
 import { UpdateMovieDto } from "./dto/update-movie.dto";
@@ -6,12 +6,16 @@ import { MoviesDataSource } from "./movies.provider";
 @Injectable()
 export class MoviesService {
 	constructor(
-		private readonly moviesProvider: MoviesDataSource,
+		private readonly moviesProvider: MoviesDataSource
 	) {
 		
 	}
 	getAllMovies(query) {
 		return this.moviesProvider.get(query);
+	}
+
+	migrate() {
+		return this.moviesProvider.migrateData();
 	}
 
 	getById(id: string) {
