@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { Pagination } from 'nestjs-typeorm-paginate';
 
 import { catchError, map, Observable, of, switchMap } from 'rxjs';
@@ -28,6 +28,21 @@ export class UserController {
 		)
 	}
 
+	@Get(':id')
+	findOne(@Param('id') id: number): Observable<UserI> {
+		return this.userService.findOne(id);
+	}
+
+	@Delete(':id')
+	deleteUser(@Param('id') id: number): Observable<any> {
+		return this.userService.deleteUser(id);
+	}
+
+	@Patch(':id')
+	updateUser(@Param('id') id: number, @Body() user: UserI): Observable<any> {
+		return this.userService.updateUser(id, user);
+	}
+	
 	@Get()
 	findAll(): Observable<UserI[]> {
 		return this.userService.findAll()

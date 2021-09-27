@@ -46,6 +46,11 @@ export class UserService {
 		)
 	}
 
+	/**
+	 * Login user with JWT.
+	 * @param user user email and password
+	 * @returns Observable<string>
+	 */
 	login(user: UserI): Observable<string> {
 		return this.validateUser(user).pipe(
 			switchMap((foundUser: UserI) => {
@@ -58,6 +63,11 @@ export class UserService {
 		)
 	}
 
+	/**
+	 * Check if user exists and password is valid.
+	 * @param user user email and password
+	 * @returns Observable<UserI>
+	 */
 	validateUser(user: UserI): Observable<UserI> {
 		return this.findByEmail(user.email).pipe(
 			switchMap((foundUser: UserI) => {
@@ -79,6 +89,10 @@ export class UserService {
 		)
 	}
 
+	/**
+	 * Find all users in database.
+	 * @returns Observable<UserI[]>
+	 */
 	findAll(): Observable<UserI[]> {
 		return from(this.userRepository.find()).pipe(
 			map((users: UserI[]) => {
@@ -88,18 +102,57 @@ export class UserService {
 		);
 	}
 
-	private findByEmail(email: string): Observable<UserI> {
+	/**
+	 * Find user by email.
+	 * @param email user email
+	 * @returns Observable<UserI>
+	 */
+	findByEmail(email: string): Observable<UserI> {
 		return from(this.userRepository.findOne({email}, { select: ['id', 'email', 'username', 'password']}))
 	}
 
-
-
-
-	private findOne(id: number): Observable<UserI> {
-		return from(this.userRepository.findOne({id}));
+	/**
+	 * Find user by Id.
+	 * @param id user id
+	 * @returns Observable<UserI>
+	 */
+	findOne(id: number): Observable<UserI> {
+		return from(this.userRepository.findOne({id})).pipe(
+			map((user: UserI) => {
+				const { password, ...result } = user;
+				return result;
+			})
+		);
 	}
 
-	private mailExists(email: string): Observable<boolean> {
+	/**
+	 * Delete user by id.
+	 * @param id user id
+	 * @returns Observable<any>
+	 */
+	deleteUser(id: number): Observable<any> {
+		return from(this.userRepository.delete(id));
+	}
+
+	/**
+	 * Update user by id.
+	 * @param id user id
+	 * @param user user data
+	 * @returns Observable<any>
+	 */
+	updateUser(id: number, user: UserI): Observable<any> {
+		delete user.email;
+		delete user.password;
+
+		return from(this.userRepository.update(id, user));
+	}
+
+	/**
+	 * Check if user with given email exists.
+	 * @param email user email
+	 * @returns Observable<boolean>
+	 */
+	mailExists(email: string): Observable<boolean> {
 		return from(this.userRepository.findOne({email})).pipe(
 			map((user: UserI) => {
 				if(user) {
