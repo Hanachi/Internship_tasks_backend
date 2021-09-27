@@ -67,6 +67,42 @@ export class UserService {
 		)
 	}
 
+	googleLogin(req) {
+		console.log(req)
+		if(!req.user) {
+			return 'No user from google'
+		}
+		return {
+			message: 'User info from Google',
+			user: req.user
+		}
+		// return this.mailExists(user.email).pipe(
+		// 	switchMap((exists: boolean) => {
+		// 		if (!exists) {
+		// 			return this.authService.hashPassword(user.password).pipe(
+		// 				switchMap((passwordHash: string) => {
+		// 					let newUser = new UserEntity();
+		// 					newUser.username = user.username;
+		// 					newUser.email = user.email;
+		// 					newUser.role = user.role;
+		// 					newUser.password = passwordHash;
+
+		// 					return from(this.userRepository.save(newUser)).pipe(
+		// 						map((user: UserI) => {
+		// 							const { password, ...result } = user;
+		// 							return result;
+		// 						}),
+		// 						catchError(err => throwError(err))
+		// 					);
+		// 				})
+		// 			)
+		// 		} else {
+		// 			throw new HttpException('Email is already in use', HttpStatus.CONFLICT)
+		// 		}
+		// 	})
+		// )
+	}
+
 	/**
 	 * Check if user exists and password is valid.
 	 * @param user user email and password

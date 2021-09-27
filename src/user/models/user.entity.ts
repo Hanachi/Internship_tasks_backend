@@ -13,7 +13,7 @@ export class UserEntity {
 	@Column({ unique: true })
 	email: string;
 
-	@Column()
+	@Column({ nullable: true})
 	password: string;
 
 	@Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
@@ -21,7 +21,7 @@ export class UserEntity {
 
 	@BeforeInsert()
 	emailToLowerCase() {
-		this.email = this.email.toLowerCase();
+		this.email = this.email?.toLowerCase();
 	}
 
 }
