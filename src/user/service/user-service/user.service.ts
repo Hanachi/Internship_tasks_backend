@@ -22,14 +22,18 @@ export class UserService {
 	 * @param newUser user data to create
 	 * @returns Observable<UserI>
 	 */
-	create(newUser: UserI): Observable<UserI> {
-		return this.mailExists(newUser.email).pipe(
+	create(user: UserI): Observable<UserI> {
+		return this.mailExists(user.email).pipe(
 			switchMap((exists: boolean) => {
 				if(!exists) {
-					return this.authService.hashPassword(newUser.password).pipe(
+					return this.authService.hashPassword(user.password).pipe(
 						switchMap((passwordHash: string) => {
-							 
+							let newUser = new UserEntity();
+							newUser.username = user.username;
+							newUser.email = user.email;
+							newUser.role = user.role;
 							newUser.password = passwordHash;
+
 							return from(this.userRepository.save(newUser)).pipe(
 								map((user: UserI) => {
 									const { password, ...result } = user;
@@ -52,7 +56,7 @@ export class UserService {
 	 * @returns Observable<string>
 	 */
 	login(user: UserI): Observable<string> {
-		return this.validateUser(user).pipe(
+		return this.validateUser(user.email, user.password).pipe(
 			switchMap((foundUser: UserI) => {
 				if(foundUser) {
 					return this.authService.generateJWT(foundUser).pipe(map((jwt: string) => jwt))
@@ -68,14 +72,14 @@ export class UserService {
 	 * @param user user email and password
 	 * @returns Observable<UserI>
 	 */
-	validateUser(user: UserI): Observable<UserI> {
-		return this.findByEmail(user.email).pipe(
+	validateUser(email: string, password: string): Observable<UserI> {
+		return from(this.userRepository.findOne({ email }, { select: ['id', 'password', 'username', 'email'] })).pipe(
 			switchMap((foundUser: UserI) => {
 				if (foundUser) {
-					return this.authService.validatePassword(user.password, foundUser.password).pipe(
+					return this.authService.validatePassword(password, foundUser.password).pipe(
 						map((matches: boolean) => {
 							if (matches) {
-								const { password, ...result } = user;
+								const { password, ...result } = foundUser;
 								return result;
 							} else {
 								throw new HttpException('Login was not successful, wrong credentials', HttpStatus.UNAUTHORIZED);
@@ -108,7 +112,7 @@ export class UserService {
 	 * @returns Observable<UserI>
 	 */
 	findByEmail(email: string): Observable<UserI> {
-		return from(this.userRepository.findOne({email}, { select: ['id', 'email', 'username', 'password']}))
+		return from(this.userRepository.findOne({email}, { select: ['id', 'email', 'username', 'password', 'role']}))
 	}
 
 	/**
