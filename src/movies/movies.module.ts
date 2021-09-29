@@ -11,16 +11,20 @@ import { Actors } from "./entities/actors.entity";
 import { ImdbRatings } from "./entities/imdbRating.entity";
 import { ContentRatings } from "./entities/contentRating.entity";
 import { UsersRatings } from "./entities/usersRating.entity";
+import { UserModule } from "src/user/user.module";
 
 @Module({
-	imports: [TypeOrmModule.forFeature([
-		Movie,
-		Genres,
-		Actors,
-		ImdbRatings,
-		ContentRatings,
-		UsersRatings
-	])],
+	imports: [
+		TypeOrmModule.forFeature([
+			Movie,
+			Genres,
+			Actors,
+			ImdbRatings,
+			ContentRatings,
+			UsersRatings,
+		]),
+		UserModule
+	],
 	exports: [TypeOrmModule],
 	controllers: [MoviesController],
 	providers: [MoviesService, MoviesDataSource],

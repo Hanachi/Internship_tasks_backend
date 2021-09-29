@@ -40,11 +40,15 @@ export class UserController {
 		return this.userService.findOne(id);
 	}
 
+	@hasRoles(UserRole.ADMIN)
+	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Delete(':id')
 	deleteUser(@Param('id') id: number): Observable<any> {
 		return this.userService.deleteUser(id);
 	}
 
+	@hasRoles(UserRole.ADMIN)
+	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Patch(':id')
 	updateUser(@Param('id') id: number, @Body() user: UserI): Observable<any> {
 		return this.userService.updateUser(id, user);
