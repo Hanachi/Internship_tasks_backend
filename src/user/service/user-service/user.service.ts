@@ -69,7 +69,12 @@ export class UserService {
 		)
 	}
 
-	googleLogin(req) {
+	/**
+	 * Login google user
+	 * @param req google token
+	 * @returns Observable<string>
+	 */
+	googleLogin(req): Observable<string> {
 		const token = req.headers.authorization;
 		const user: any = jwtDecode(token);
 		const email = user.email;
