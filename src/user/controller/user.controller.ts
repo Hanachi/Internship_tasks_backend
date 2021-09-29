@@ -5,7 +5,6 @@ import { catchError, map, Observable, of, switchMap } from 'rxjs';
 import { hasRoles } from 'src/auth/decorator/roles.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-guard';
 import { RolesGuard } from 'src/auth/guards/roles-guard';
-import { AuthGuard } from '@nestjs/passport';
 
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserI, UserRole } from '../models/user.interface';
@@ -30,13 +29,8 @@ export class UserController {
 			))
 		)
 	}
-	
-	@Get('/google')
-	@UseGuards(AuthGuard('google'))
-	async googleAuth(@Req() req) { }
 
 	@Get('/login/google')
-	@UseGuards(AuthGuard('google'))
 	googleLogin(@Req() req) {
 		return this.userService.googleLogin(req);
 	}
@@ -56,7 +50,7 @@ export class UserController {
 		return this.userService.updateUser(id, user);
 	}
 	
-	@hasRoles(UserRole.USER)
+	@hasRoles(UserRole.ADMIN)
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Get()
 	findAll(): Observable<UserI[]> {

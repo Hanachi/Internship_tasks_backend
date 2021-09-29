@@ -4,6 +4,7 @@ export interface UserI {
 	email?: string
 	password?: string
 	role?: UserRole
+	googleUser?: boolean
 }
 
 export enum UserRole {

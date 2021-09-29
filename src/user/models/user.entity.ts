@@ -19,6 +19,9 @@ export class UserEntity {
 	@Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
 	role: UserRole
 
+	@Column({ default: false })
+	googleUser: boolean
+
 	@BeforeInsert()
 	emailToLowerCase() {
 		this.email = this.email?.toLowerCase();

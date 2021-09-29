@@ -6,6 +6,7 @@ import { catchError, from, map, Observable, switchMap, throwError } from 'rxjs';
 import { UserEntity } from 'src/user/models/user.entity';
 import { UserI } from 'src/user/models/user.interface';
 import { AuthService } from 'src/auth/services/auth.service';
+import jwtDecode from 'jwt-decode';
 
 const bcrypt = require('bcrypt');
 
@@ -25,6 +26,7 @@ export class UserService {
 	create(user: UserI): Observable<UserI> {
 		return this.mailExists(user.email).pipe(
 			switchMap((exists: boolean) => {
+				console.log(exists)
 				if(!exists) {
 					return this.authService.hashPassword(user.password).pipe(
 						switchMap((passwordHash: string) => {
@@ -59,7 +61,7 @@ export class UserService {
 		return this.validateUser(user.email, user.password).pipe(
 			switchMap((foundUser: UserI) => {
 				if(foundUser) {
-					return this.authService.generateJWT(foundUser).pipe(map((jwt: string) => jwt))
+					return this.authService.generateJWT(foundUser).pipe(map((jwt: string) => jwt));
 				} else {
 					throw new HttpException('Login was not successful, wrong credentials', HttpStatus.UNAUTHORIZED);
 				}
@@ -68,39 +70,31 @@ export class UserService {
 	}
 
 	googleLogin(req) {
-		console.log(req)
-		if(!req.user) {
-			return 'No user from google'
-		}
-		return {
-			message: 'User info from Google',
-			user: req.user
-		}
-		// return this.mailExists(user.email).pipe(
-		// 	switchMap((exists: boolean) => {
-		// 		if (!exists) {
-		// 			return this.authService.hashPassword(user.password).pipe(
-		// 				switchMap((passwordHash: string) => {
-		// 					let newUser = new UserEntity();
-		// 					newUser.username = user.username;
-		// 					newUser.email = user.email;
-		// 					newUser.role = user.role;
-		// 					newUser.password = passwordHash;
+		const token = req.headers.authorization;
+		const user: any = jwtDecode(token);
+		const email = user.email;
 
-		// 					return from(this.userRepository.save(newUser)).pipe(
-		// 						map((user: UserI) => {
-		// 							const { password, ...result } = user;
-		// 							return result;
-		// 						}),
-		// 						catchError(err => throwError(err))
-		// 					);
-		// 				})
-		// 			)
-		// 		} else {
-		// 			throw new HttpException('Email is already in use', HttpStatus.CONFLICT)
-		// 		}
-		// 	})
-		// )
+		return this.mailExists(user.email).pipe(
+			switchMap((exists: boolean) => {
+				if (!exists) {
+					let newUser = new UserEntity();
+					newUser.username = user.given_name;
+					newUser.email = user.email;
+					newUser.role = user.role;
+					newUser.googleUser = true;
+
+					from(this.userRepository.save(newUser));
+					return this.googleLogin(req);
+				} else {
+					return from(this.userRepository.findOne({ email }, { select: ['id', 'username', 'email', 'role'] })).pipe(
+						switchMap((user: UserI) => {
+							return this.authService.generateJWT(user).pipe(map((jwt: string) => jwt));
+						}),
+						catchError(err => throwError(err))
+					);
+				}
+			})
+		)
 	}
 
 	/**
@@ -109,7 +103,7 @@ export class UserService {
 	 * @returns Observable<UserI>
 	 */
 	validateUser(email: string, password: string): Observable<UserI> {
-		return from(this.userRepository.findOne({ email }, { select: ['id', 'password', 'username', 'email'] })).pipe(
+		return from(this.userRepository.findOne({ email }, { select: ['id', 'password', 'username', 'email', 'role'] })).pipe(
 			switchMap((foundUser: UserI) => {
 				if (foundUser) {
 					return this.authService.validatePassword(password, foundUser.password).pipe(
