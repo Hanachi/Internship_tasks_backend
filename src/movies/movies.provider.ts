@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like, getRepository } from 'typeorm';
+import { Repository, getRepository } from 'typeorm';
 import * as fs from 'fs';
 
-import { CreateMovieDto } from "./dto/create-movie.dto";
-import { UpdateMovieDto } from "./dto/update-movie.dto";
-import { Movie } from "./entities/movies.entity";
+import { CreateMovieDto } from './dto/create-movie.dto';
+import { UpdateMovieDto } from './dto/update-movie.dto';
+import { Movie } from './entities/movies.entity';
 import { Genres } from './entities/genres.entity';
 import { Actors } from './entities/actors.entity';
 import { ImdbRatings } from './entities/imdbRating.entity';
