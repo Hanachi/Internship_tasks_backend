@@ -4,7 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { Movie } from './movies/entities/movies.entity';
 import { MoviesModule } from './movies/movies.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
