@@ -3,10 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { catchError, from, map, Observable, switchMap, throwError } from 'rxjs';
 
-import { UserEntity } from 'src/user/models/user.entity';
-import { UserI } from 'src/user/models/user.interface';
-import { AuthService } from 'src/auth/services/auth.service';
-
+import { UserEntity } from '../../models/user.entity';
+import { UserI } from '../../models/user.interface';
+import { AuthService } from '../../../auth/services/auth.service';
+import jwtDecode from 'jwt-decode';
 const bcrypt = require('bcrypt');
 
 @Injectable()
@@ -25,6 +25,7 @@ export class UserService {
 	create(user: UserI): Observable<UserI> {
 		return this.mailExists(user.email).pipe(
 			switchMap((exists: boolean) => {
+				console.log(exists)
 				if(!exists) {
 					return this.authService.hashPassword(user.password).pipe(
 						switchMap((passwordHash: string) => {
@@ -59,9 +60,42 @@ export class UserService {
 		return this.validateUser(user.email, user.password).pipe(
 			switchMap((foundUser: UserI) => {
 				if(foundUser) {
-					return this.authService.generateJWT(foundUser).pipe(map((jwt: string) => jwt))
+					return this.authService.generateJWT(foundUser).pipe(map((jwt: string) => jwt));
 				} else {
 					throw new HttpException('Login was not successful, wrong credentials', HttpStatus.UNAUTHORIZED);
+				}
+			})
+		)
+	}
+
+	/**
+	 * Login google user
+	 * @param req google token
+	 * @returns Observable<string>
+	 */
+	googleLogin(req): Observable<string> {
+		const token = req.headers.authorization;
+		const user: any = jwtDecode(token);
+		const email = user.email;
+
+		return this.mailExists(user.email).pipe(
+			switchMap((exists: boolean) => {
+				if (!exists) {
+					let newUser = new UserEntity();
+					newUser.username = user.given_name;
+					newUser.email = user.email;
+					newUser.role = user.role;
+					newUser.googleUser = true;
+
+					from(this.userRepository.save(newUser));
+					return this.googleLogin(req);
+				} else {
+					return from(this.userRepository.findOne({ email }, { select: ['id', 'username', 'email', 'role'] })).pipe(
+						switchMap((user: UserI) => {
+							return this.authService.generateJWT(user).pipe(map((jwt: string) => jwt));
+						}),
+						catchError(err => throwError(err))
+					);
 				}
 			})
 		)
@@ -73,7 +107,7 @@ export class UserService {
 	 * @returns Observable<UserI>
 	 */
 	validateUser(email: string, password: string): Observable<UserI> {
-		return from(this.userRepository.findOne({ email }, { select: ['id', 'password', 'username', 'email'] })).pipe(
+		return from(this.userRepository.findOne({ email }, { select: ['id', 'password', 'username', 'email', 'role'] })).pipe(
 			switchMap((foundUser: UserI) => {
 				if (foundUser) {
 					return this.authService.validatePassword(password, foundUser.password).pipe(

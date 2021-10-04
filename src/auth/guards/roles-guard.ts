@@ -1,9 +1,8 @@
-import { CanActivate, ExecutionContext, forwardRef, Inject, Injectable } from "@nestjs/common";
-import { Reflector } from "@nestjs/core";
-import { map, Observable } from "rxjs";
-import { UserI } from "src/user/models/user.interface";
-import { UserHelperService } from "src/user/service/user-helper/user-helper.service";
-import { UserService } from "src/user/service/user-service/user.service";
+import { CanActivate, ExecutionContext, forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { map, Observable } from 'rxjs';
+import { UserI } from '../../user/models/user.interface';
+import { UserService } from '../../user/service/user-service/user.service';
 
 
 @Injectable()

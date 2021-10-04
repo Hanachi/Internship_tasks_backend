@@ -1,10 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 
 import { catchError, map, Observable, of, switchMap } from 'rxjs';
 
-import { hasRoles } from 'src/auth/decorator/roles.decorator';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-guard';
-import { RolesGuard } from 'src/auth/guards/roles-guard';
+import { hasRoles } from '../../auth/decorator/roles.decorator';
+import { JwtAuthGuard } from '../../auth/guards/jwt-guard';
+import { RolesGuard } from '../../auth/guards/roles-guard';
 
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserI, UserRole } from '../models/user.interface';
@@ -30,16 +30,25 @@ export class UserController {
 		)
 	}
 
+	@Get('/login/google')
+	googleLogin(@Req() req) {
+		return this.userService.googleLogin(req);
+	}
+	
 	@Get(':id')
 	findOne(@Param('id') id: number): Observable<UserI> {
 		return this.userService.findOne(id);
 	}
 
+	@hasRoles(UserRole.ADMIN)
+	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Delete(':id')
 	deleteUser(@Param('id') id: number): Observable<any> {
 		return this.userService.deleteUser(id);
 	}
 
+	@hasRoles(UserRole.ADMIN)
+	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Patch(':id')
 	updateUser(@Param('id') id: number, @Body() user: UserI): Observable<any> {
 		return this.userService.updateUser(id, user);
@@ -61,4 +70,5 @@ export class UserController {
 			
 		)
 	}
+
 }
