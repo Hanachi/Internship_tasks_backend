@@ -4,12 +4,13 @@ import { ApiBody, ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagg
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MoviesService } from './movies.service';
+
 import { Movie } from './entities/movies.entity';
-import * as fs from 'fs';
-import { hasRoles } from 'src/auth/decorator/roles.decorator';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-guard';
-import { RolesGuard } from 'src/auth/guards/roles-guard';
-import { UserRole } from 'src/user/models/user.interface';
+
+import { JwtAuthGuard } from '../auth/guards/jwt-guard';
+import { RolesGuard } from '../auth/guards/roles-guard';
+import { hasRoles } from '../auth/decorator/roles.decorator';
+import { UserRole } from '../user/models/user.interface';
 
 @ApiTags('movies')
 @Controller('movies')

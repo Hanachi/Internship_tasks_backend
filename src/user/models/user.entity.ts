@@ -1,5 +1,5 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { UserRole } from "./user.interface";
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { UserRole } from './user.interface';
 
 @Entity()
 export class UserEntity {

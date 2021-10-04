@@ -2,9 +2,9 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } fro
 
 import { catchError, map, Observable, of, switchMap } from 'rxjs';
 
-import { hasRoles } from 'src/auth/decorator/roles.decorator';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-guard';
-import { RolesGuard } from 'src/auth/guards/roles-guard';
+import { hasRoles } from '../../auth/decorator/roles.decorator';
+import { JwtAuthGuard } from '../../auth/guards/jwt-guard';
+import { RolesGuard } from '../../auth/guards/roles-guard';
 
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserI, UserRole } from '../models/user.interface';

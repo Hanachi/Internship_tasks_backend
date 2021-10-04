@@ -3,11 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { catchError, from, map, Observable, switchMap, throwError } from 'rxjs';
 
-import { UserEntity } from 'src/user/models/user.entity';
-import { UserI } from 'src/user/models/user.interface';
-import { AuthService } from 'src/auth/services/auth.service';
+import { UserEntity } from '../../models/user.entity';
+import { UserI } from '../../models/user.interface';
+import { AuthService } from '../../../auth/services/auth.service';
 import jwtDecode from 'jwt-decode';
-
 const bcrypt = require('bcrypt');
 
 @Injectable()
