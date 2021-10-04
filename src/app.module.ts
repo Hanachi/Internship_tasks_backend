@@ -4,8 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { Movie } from './movies/entities/movies.entity';
 import { MoviesModule } from './movies/movies.module';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -20,7 +21,9 @@ import { MoviesModule } from './movies/movies.module';
       autoLoadEntities: true,
       synchronize: true
     }),
-    MoviesModule
+    MoviesModule,
+    UserModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
