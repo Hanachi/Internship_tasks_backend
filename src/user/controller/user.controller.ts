@@ -1,11 +1,13 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import { Pagination } from 'nestjs-typeorm-paginate';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 
-import { Observable, of, switchMap } from 'rxjs';
+import { catchError, map, Observable, of, switchMap } from 'rxjs';
+
+import { hasRoles } from '../../auth/decorator/roles.decorator';
+import { JwtAuthGuard } from '../../auth/guards/jwt-guard';
+import { RolesGuard } from '../../auth/guards/roles-guard';
 
 import { CreateUserDto } from '../dto/create-user.dto';
-import { LoginUserDto } from '../dto/login-user.dto';
-import { UserI } from '../models/user.interface';
+import { UserI, UserRole } from '../models/user.interface';
 
 import { UserHelperService } from '../service/user-helper/user-helper.service';
 import { UserService } from '../service/user-service/user.service';
@@ -19,25 +21,54 @@ export class UserController {
 	){}
 
 	@Post()
-	create(@Body() createUserDto: CreateUserDto): Observable<UserI> {
+	create(@Body() createUserDto: CreateUserDto): Observable<UserI | Object> {
 		return this.userHelperService.createUserDtoToEntity(createUserDto).pipe(
-			switchMap((user: UserI) => this.userService.create(user))
+			switchMap((user: UserI) => this.userService.create(user).pipe(
+				map((user: UserI) => user),
+				catchError(err => of({ error: err.message }))
+			))
 		)
 	}
 
+	@Get('/login/google')
+	googleLogin(@Req() req) {
+		return this.userService.googleLogin(req);
+	}
+	
+	@Get(':id')
+	findOne(@Param('id') id: number): Observable<UserI> {
+		return this.userService.findOne(id);
+	}
+
+	@hasRoles(UserRole.ADMIN)
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Delete(':id')
+	deleteUser(@Param('id') id: number): Observable<any> {
+		return this.userService.deleteUser(id);
+	}
+
+	@hasRoles(UserRole.ADMIN)
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Patch(':id')
+	updateUser(@Param('id') id: number, @Body() user: UserI): Observable<any> {
+		return this.userService.updateUser(id, user);
+	}
+	
+	@hasRoles(UserRole.ADMIN)
+	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Get()
-	findAll(
-		@Query('page') page: number = 1,
-		@Query('limit') limit: number = 10
-	): Observable<Pagination<UserI>> {
-		limit = limit > 100 ? 100 : limit
-		return this.userService.findAll({page, limit, route:'http://localhost:5000/users'})
+	findAll(): Observable<UserI[]> {
+		return this.userService.findAll()
 	}
 
 	@Post('login')
-	login(@Body() loginUserDto: LoginUserDto): Observable<boolean> {
-		return this.userHelperService.loginUserDtoToEntity(loginUserDto).pipe(
-			switchMap((user: UserI) => this.userService.login(user))
+	login(@Body() user: UserI): Observable<Object> {
+			return this.userService.login(user).pipe(
+				map((jwt: string) => {
+					return { access_token: jwt }
+				})
+			
 		)
 	}
+
 }

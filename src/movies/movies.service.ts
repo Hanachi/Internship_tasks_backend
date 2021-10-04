@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
-import { CreateMovieDto } from "./dto/create-movie.dto";
-import { UpdateMovieDto } from "./dto/update-movie.dto";
-import { MoviesDataSource } from "./movies.provider";
+import { CreateMovieDto } from './dto/create-movie.dto';
+import { UpdateMovieDto } from './dto/update-movie.dto';
+import { MoviesDataSource } from './movies.provider';
 @Injectable()
 export class MoviesService {
 	constructor(

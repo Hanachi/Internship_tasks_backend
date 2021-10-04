@@ -1,26 +1,30 @@
-import { Module } from "@nestjs/common";
-import { MoviesService } from "./movies.service";
-import { TypeOrmModule } from "@nestjs/typeorm";
+import { Module } from '@nestjs/common';
+import { MoviesService } from './movies.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { MoviesController } from "./movies.controller";
-import { MoviesDataSource } from "./movies.provider";
+import { MoviesController } from './movies.controller';
+import { MoviesDataSource } from './movies.provider';
 
-import { Movie } from "./entities/movies.entity";
-import { Genres } from "./entities/genres.entity";
-import { Actors } from "./entities/actors.entity";
-import { ImdbRatings } from "./entities/imdbRating.entity";
-import { ContentRatings } from "./entities/contentRating.entity";
-import { UsersRatings } from "./entities/usersRating.entity";
+import { Movie } from './entities/movies.entity';
+import { Genres } from './entities/genres.entity';
+import { Actors } from './entities/actors.entity';
+import { ImdbRatings } from './entities/imdbRating.entity';
+import { ContentRatings } from './entities/contentRating.entity';
+import { UsersRatings } from './entities/usersRating.entity';
+import { UserModule } from '../user/user.module';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([
-		Movie,
-		Genres,
-		Actors,
-		ImdbRatings,
-		ContentRatings,
-		UsersRatings
-	])],
+	imports: [
+		TypeOrmModule.forFeature([
+			Movie,
+			Genres,
+			Actors,
+			ImdbRatings,
+			ContentRatings,
+			UsersRatings,
+		]),
+		UserModule,
+	],
 	exports: [TypeOrmModule],
 	controllers: [MoviesController],
 	providers: [MoviesService, MoviesDataSource],

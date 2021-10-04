@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, ManyToOne, ManyToMany, OneToOne, JoinTable, DeleteDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, OneToOne, JoinTable, DeleteDateColumn } from 'typeorm';
 import { Actors } from './actors.entity';
 import { ContentRatings } from './contentRating.entity';
 import { Genres } from './genres.entity';
