@@ -12,28 +12,29 @@ import { UserEntity } from '../user/models/user.entity';
 @Injectable()
 export class ChatService {
 	constructor(
-		private readonly authenticationService: AuthenticationService,
+		// private readonly authenticationService: AuthenticationService,
 		@InjectRepository(Message)
 		private messagesRepository: Repository<Message>,
 	) {}
 
-	async getUserFromSocket(socket: Socket) {
-		const handshake = socket.handshake.headers;
-		const userProfile = JSON.parse(localStorage.getItem('profile'))
-		const user = await this.authenticationService.getUserFromAuthenticationToken(userProfile);
-		if (!user) {
-			throw new WsException('Invalid credentials.');
-		}
-		return user;
-	}
+	// async getUserFromSocket(socket: Socket) {
+	// 	const handshake = socket.handshake.headers;
+	// 	const userProfile = JSON.parse(localStorage.getItem('profile'))
+	// 	const user = await this.authenticationService.getUserFromAuthenticationToken(userProfile);
+	// 	if (!user) {
+	// 		throw new WsException('Invalid credentials.');
+	// 	}
+	// 	return user;
+	// }
 
-	async saveMessage(content: string, author) {
+	async saveMessage(content) {
 		const newMessage = await this.messagesRepository.create({
-			content,
-			author
+			content: content.message,
+			time: content.time,
+			author: content.author.id
 		});
 		await this.messagesRepository.save(newMessage);
-		return newMessage;
+		return {...newMessage, author: content.author.username};
 	}
 
 	async getAllMessages() {

@@ -9,6 +9,9 @@ class Message {
 	@Column()
 	public content: string;
 
+	@Column()
+	public time: string;
+
 	@ManyToOne(() => UserEntity)
 	public author: UserEntity;
 }
