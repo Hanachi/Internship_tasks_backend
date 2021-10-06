@@ -9,7 +9,6 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ChatGateway } from './chat/chat.gateway';
 import { ChatService } from './chat/chat.service';
-import { AuthenticationService } from './chat/authentication.service';
 import Message from './chat/message/message.entity';
 @Module({
   imports: [
