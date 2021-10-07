@@ -18,7 +18,7 @@ export class ChatService {
 			author: content.author.id
 		});
 		await this.messagesRepository.save(newMessage);
-		return {...newMessage, author: {username: content.author.username}};
+		return {...newMessage, author: {id: content.author.id, username: content.author.username}};
 	}
 
 	async getAllMessages() {

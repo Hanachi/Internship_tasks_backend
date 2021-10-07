@@ -7,15 +7,6 @@ import { UserEntity } from '../../../user/models/user.entity';
 
 describe('UserService', () => {
   let service: UserService;
-  // let repositoryMock: MockType<Repository<UserEntity>>;
-  // type MockType<T> = {
-  //   [P in keyof T]?: jest.Mock<{}>;
-  // };
-
-  // const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(() => ({
-  //   findOne: jest.fn(entity => entity),
-  //   // ...
-  // }));
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
