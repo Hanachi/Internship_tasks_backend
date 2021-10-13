@@ -7,6 +7,9 @@ import { AppService } from './app.service';
 import { MoviesModule } from './movies/movies.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ChatGateway } from './chat/chat.gateway';
+import { ChatService } from './chat/chat.service';
+import Message from './chat/message/message.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -21,12 +24,15 @@ import { AuthModule } from './auth/auth.module';
       autoLoadEntities: true,
       synchronize: true
     }),
+    TypeOrmModule.forFeature([
+      Message
+    ]),
     MoviesModule,
     UserModule,
     AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ChatGateway, ChatService],
 })
 
 export class AppModule {}
