@@ -15,7 +15,16 @@ export class Movie {
 
 	@Column()
 	year: string;
-	
+
+	@Column()
+	posterUrl: string;
+
+	@Column({nullable: true})
+	videoUrl: string;
+
+	@Column()
+	storyline: string;
+
 	@OneToOne(
 		() => ImdbRatings,
 		(imdbRating: ImdbRatings) => imdbRating.movie,

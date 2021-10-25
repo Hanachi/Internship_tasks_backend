@@ -14,4 +14,10 @@ export class UpdateMovieDto {
 	readonly genres: string[]
 	@ApiProperty({ type: [String], description: 'actors' })
 	readonly actors: string[]
+	@ApiProperty({ type: String, description: 'posterUrl' })
+	readonly posterUrl: string
+	@ApiProperty({ type: String, description: 'videoUrl' })
+	readonly videoUrl: string
+	@ApiProperty({ type: String, description: 'storyline' })
+	readonly storyline: string
 }
