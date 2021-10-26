@@ -103,6 +103,8 @@ export class MoviesDataSource {
 			movie.imdbRating = imdbR;
 			movie.contentRating = contentR;
 			movie.usersRating = usersR;
+			movie.posterUrl = movies[i].posterurl;
+			movie.storyline = movies[i].storyline;
 
 			await this.moviesRepository.save(movie);
 		}
@@ -204,6 +206,9 @@ export class MoviesDataSource {
 		let movie = new Movie();
 		movie.title = movieDto.title;
 		movie.year = movieDto.year;
+		movie.posterUrl = movieDto.posterUrl;
+		movie.videoUrl = movieDto.videoUrl;
+		movie.storyline = movieDto.storyline;
 		movie.genres = createGenres;
 		movie.actors = createActors;
 		movie.imdbRating = imdbRating;
@@ -231,6 +236,9 @@ export class MoviesDataSource {
 
 		postToUpdate.title = updateMovieDto.title;
 		postToUpdate.year = updateMovieDto.year;
+		postToUpdate.posterUrl = updateMovieDto.posterUrl;
+		postToUpdate.videoUrl = updateMovieDto.videoUrl;
+		postToUpdate.storyline = updateMovieDto.storyline;
 		postToUpdate.genres = updateGenres;
 		postToUpdate.actors = updateActors;
 		postToUpdate.imdbRating.imdb_rating = updateMovieDto.imdbRating;
