@@ -50,7 +50,6 @@ describe('AuthService', () => {
   it('Password are hashed after signUp', () => {
     const pass = 'mypass';
     const hash =  service.hashPassword(pass);
-    expect(mockAuthService.hashPassword).toHaveBeenCalled()
     hash.subscribe(val => expect(val).toMatch('$2b$12$'));
   });
   
