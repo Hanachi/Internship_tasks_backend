@@ -7,6 +7,7 @@ import { UserEntity } from '../../models/user.entity';
 import { UserI } from '../../models/user.interface';
 import { AuthService } from '../../../auth/services/auth.service';
 import jwtDecode from 'jwt-decode';
+
 const bcrypt = require('bcrypt');
 
 @Injectable()
