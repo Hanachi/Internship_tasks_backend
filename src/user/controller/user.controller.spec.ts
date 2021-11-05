@@ -1,7 +1,7 @@
-import { HttpException, HttpStatus, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { NotFoundError, of } from 'rxjs';
+import { of } from 'rxjs';
 import { AuthService } from '../../auth/services/auth.service';
 import { UserRole } from '../models/user.interface';
 import { UserHelperService } from '../service/user-helper/user-helper.service';
@@ -13,6 +13,8 @@ describe('UserController', () => {
   let service: UserService;
   let findOne: jest.Mock;
   let find: jest.Mock;
+  let update: jest.Mock;
+  let save: jest.Mock;
 
   class UserEntity {
     id: number;
@@ -39,46 +41,39 @@ describe('UserController', () => {
 
     validatePassword: jest.fn(() => {
       return of(true);
+    }),
+
+    hashPassword: jest.fn((password) => {
+      return of('$2b$12$2X/ybbQbQ8Lm6IUkybvzleKmO.NNeTtVdS0sWpYGaNGfWksrf5DS2')
     })
 
   }
 
-  const mockUserService = {
-    create: jest.fn((newUser) => {
-     const dto = mockHelperService.createUserDtoToEntity(newUser)
-      return {
-        id: Date.now(),
-        ...dto
-      }
-    }),
-    findAll: jest.fn(() => {
-      return [newUser, newUser1]
-    }),
-    updateUser: jest.fn().mockImplementation((id, dto) => ({
-      id,
-      ...dto
-    })),
-    // validateUser: jest.fn((email, password) => {
-    //   if(foundUser.email == email) {
-    //     return findOne.mockReturnValue(Promise.resolve(foundUser))
-    //   } else {
-    //     throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    //   }
-
-    // })
-  }
-
-
-  const newUser = {
+  const user1 = {
     username: 'Marius',
     email: 'test@test.com',
     password: null,
-    role: 'admin',
+    role: UserRole.ADMIN,
     googleUser: true
   }
 
+  const userToCreate = {
+    username: 'NewUser',
+    email: 'mail@test.com',
+    password: 'Mypass123',
+    role: UserRole.USER,
+    googleUser: false
+  }
+
+  const createdUser = {
+    username: 'NewUser',
+    email: 'mail@test.com',
+    role: UserRole.USER,
+    googleUser: false
+  }
+
   const foundUser = {
-    id: 2,
+    id: 1,
     username: 'Jack',
     email: 'test@test.com',
     password: null,
@@ -86,17 +81,35 @@ describe('UserController', () => {
     googleUser: true
   }
 
-  const newUser1 = {
+  const updatedUser = {
+    id: 2,
+    username: 'Andrew',
+    role: UserRole.USER,
+    googleUser: true
+  }
+
+  const userToUpdate = {
+    username: 'Jack',
+    email: 'test@test.com',
+    password: null,
+    role: UserRole.USER,
+    googleUser: true
+  }
+
+  const user2 = {
     username: 'Marius',
     email: 'test@test.com',
     password: null,
-    role: 'user',
+    role: UserRole.USER,
     googleUser: true
   }
 
   beforeEach(async () => {
     findOne = jest.fn();
     find = jest.fn();
+    update = jest.fn();
+    save = jest.fn();
+    
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserController],
       providers: [UserService,
@@ -108,7 +121,9 @@ describe('UserController', () => {
           provide: getRepositoryToken(UserEntity),
           useValue: {
             findOne,
-            find
+            find,
+            update,
+            save
           }
         },
         {
@@ -126,34 +141,36 @@ describe('UserController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
-  it('should create a new user', () => {
-    const dto = mockHelperService.createUserDtoToEntity(newUser);
-    expect(mockUserService.create(newUser)).toEqual({
-      id: expect.any(Number),
-      ...newUser
-    });
-    expect(mockHelperService.createUserDtoToEntity).toHaveBeenCalled();
-    expect(mockUserService.create).toHaveBeenCalledWith(dto);
+  
+  it('should create new user', () => {
+    jest.spyOn(service, 'mailExists').mockReturnValue(of(false))
+    save.mockReturnValue(of(createdUser));
+    const createUser = service.create(userToCreate);
+    createUser.subscribe(val => expect(val).toEqual(createdUser));
+    expect(mockAuthService.hashPassword).toHaveBeenCalledWith(userToCreate.password);
   })
-  // it('return all users', () => {
-  //   expect(controller.findAll()).toEqual([newUser,newUser1])
-  // })
 
-  // it('should update user', () => {
-  //   const dto = mockHelperService.createUserDtoToEntity(newUser);
-  //   expect(controller.updateUser(1, dto)).toEqual({
-  //     id: 1,
-  //     ...dto
-  //   })
-  //   expect(mockUserService.updateUser).toHaveBeenCalled();
-  // })
+  it('user already exists', () => {
+    jest.spyOn(service, 'mailExists').mockReturnValue(of(true))
+    const createUser = service.create(user1);
+    const alreadyInUseError = new HttpException('Email is already in use', HttpStatus.CONFLICT);
+    createUser.subscribe(val => console.log(val), err => expect(err).toEqual(alreadyInUseError));
+  })
+  
+  it('return all users', () => {
+    find.mockReturnValue(of([user1, user2]));
+    const findAllUsers = service.findAll();
+    findAllUsers.subscribe(val => expect(val).toEqual([user1, user2]))
+  })
 
-  // it('user not found', () => {
-  //   let user: UserEntity = foundUser;
-  //   beforeEach(() => {
-  //     findOne.mockReturnValue(Promise.resolve(user));
-  //   })
-  // })
+  it('should update user', () => {
+    update.mockReturnValue(of(updatedUser));
+    const serviceUpdateUser = service.updateUser(2, userToUpdate);
+    serviceUpdateUser.subscribe(val => expect(val).toEqual({
+      id: 2,
+      ...updatedUser
+    }))
+  })
 
   it('success user validation', () => {
     let user: UserEntity = foundUser;
