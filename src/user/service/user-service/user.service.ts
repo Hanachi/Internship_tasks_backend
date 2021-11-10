@@ -25,7 +25,6 @@ export class UserService {
 	create(user: UserI): Observable<UserI> {
 		return this.mailExists(user.email).pipe(
 			switchMap((exists: boolean) => {
-				console.log(exists)
 				if(!exists) {
 					return this.authService.hashPassword(user.password).pipe(
 						switchMap((passwordHash: string) => {
