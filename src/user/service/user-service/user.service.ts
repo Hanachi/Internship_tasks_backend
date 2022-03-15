@@ -7,6 +7,8 @@ import { UserEntity } from '../../models/user.entity';
 import { UserI } from '../../models/user.interface';
 import { AuthService } from '../../../auth/services/auth.service';
 import jwtDecode from 'jwt-decode';
+import { AuthError } from '../../../enums/errors';
+
 const bcrypt = require('bcrypt');
 
 @Injectable()
@@ -44,7 +46,7 @@ export class UserService {
 						})
 					)
 				} else {
-					throw new HttpException('Email is already in use', HttpStatus.CONFLICT)
+					throw new HttpException(AuthError.MailExists, HttpStatus.CONFLICT)
 				}
 			})
 		)
@@ -61,7 +63,7 @@ export class UserService {
 				if(foundUser) {
 					return this.authService.generateJWT(foundUser).pipe(map((jwt: string) => jwt));
 				} else {
-					throw new HttpException('Login was not successful, wrong credentials', HttpStatus.UNAUTHORIZED);
+					throw new HttpException(AuthError.WrongCredentials, HttpStatus.UNAUTHORIZED);
 				}
 			})
 		)
@@ -115,12 +117,12 @@ export class UserService {
 								const { password, ...result } = foundUser;
 								return result;
 							} else {
-								throw new HttpException('Login was not successful, wrong credentials', HttpStatus.UNAUTHORIZED);
+								throw new HttpException(AuthError.WrongCredentials, HttpStatus.UNAUTHORIZED);
 							}
 						})
 					)
 				} else {
-					throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+					throw new HttpException(AuthError.WrongCredentials, HttpStatus.UNAUTHORIZED);
 				}
 			})
 		)
@@ -194,6 +196,18 @@ export class UserService {
 			map((user: UserI) => {
 				if(user) {
 					return true;
+				} else {
+					return false;
+				}
+			})
+		)
+	}
+
+	mailExistsCheck(email: string): Observable<object | boolean> {
+		return from(this.userRepository.findOne({email})).pipe(
+			map((user: UserI) => {
+				if(user) {
+					return { error: AuthError.MailExists }
 				} else {
 					return false;
 				}

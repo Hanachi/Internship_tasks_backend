@@ -4,7 +4,7 @@ services:
     container_name: frontend
     image: node:12
     volumes:
-    - ../frontend/client:/app
+    - ../Internship_tasks_frontend/client:/app
     ports:
     - 3000:3000
     networks:

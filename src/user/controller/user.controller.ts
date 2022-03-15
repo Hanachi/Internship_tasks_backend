@@ -40,6 +40,11 @@ export class UserController {
 		return this.userService.findOne(id);
 	}
 
+	@Post('/check/email')
+	checkEmail(@Req() req) {
+		return this.userService.mailExistsCheck(req.body.email);
+	}
+
 	@hasRoles(UserRole.ADMIN)
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Delete(':id')
