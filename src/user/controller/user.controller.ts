@@ -32,7 +32,6 @@ export class UserController {
 
 	@Get('/login/google')
 	googleLogin(@Req() req) {
-		console.log(req.body)
 		return this.userService.googleLogin(req);
 	}
 	
