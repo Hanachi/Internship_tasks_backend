@@ -32,12 +32,18 @@ export class UserController {
 
 	@Get('/login/google')
 	googleLogin(@Req() req) {
+		console.log(req.body)
 		return this.userService.googleLogin(req);
 	}
 	
 	@Get(':id')
 	findOne(@Param('id') id: number): Observable<UserI> {
 		return this.userService.findOne(id);
+	}
+
+	@Post('/check/email')
+	checkEmail(@Req() req) {
+		return this.userService.mailExistsCheck(req.body.email);
 	}
 
 	@hasRoles(UserRole.ADMIN)

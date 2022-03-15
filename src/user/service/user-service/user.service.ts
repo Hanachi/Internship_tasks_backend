@@ -120,7 +120,7 @@ export class UserService {
 						})
 					)
 				} else {
-					throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+					throw new HttpException('Login was not successful, wrong credentials', HttpStatus.UNAUTHORIZED);
 				}
 			})
 		)
@@ -194,6 +194,18 @@ export class UserService {
 			map((user: UserI) => {
 				if(user) {
 					return true;
+				} else {
+					return false;
+				}
+			})
+		)
+	}
+
+	mailExistsCheck(email: string): Observable<object | boolean> {
+		return from(this.userRepository.findOne({email})).pipe(
+			map((user: UserI) => {
+				if(user) {
+					return {error: 'Email is already in use'}
 				} else {
 					return false;
 				}
